@@ -15,4 +15,10 @@ namespace BasicRestAPIServer.DTO
         [Required]
         public string Name { get; init; }
     }
+
+    public record PlayerUpdateDTO
+    {
+        [Required]
+        public string Name { get; init; }
+    }
 }

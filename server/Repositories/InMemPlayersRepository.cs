@@ -28,5 +28,11 @@ namespace BasicRestAPIServer.Repositories
         {
             players.Add(player);
         }
+
+        public void UpdatePlayer(Player player)
+        {
+            var index = players.FindIndex(existingPlayer => existingPlayer.Id == player.Id);
+            players[index] = player;
+        }
     }
 }

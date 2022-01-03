@@ -48,7 +48,27 @@ namespace BasicRestAPIServer.Controllers
 
             repository.CreatePlayer(player);
 
-            return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player.AsDTO() );
+            return CreatedAtAction( nameof(GetPlayer), new { id = player.Id }, player.AsDTO() );
+        }
+
+        [HttpPut("{id}")] // PUT /Players/{id}
+        public ActionResult UpdateItem(Guid id, PlayerUpdateDTO playerDTO)
+        {
+            var existingPlayer = repository.GetPlayer(id);
+
+            if (existingPlayer is null)
+            {
+                return NotFound();
+            }
+
+            Player updatedPlayer = existingPlayer with
+            {
+                Name = playerDTO.Name
+            };
+
+            repository.UpdatePlayer(updatedPlayer);
+
+            return NoContent();
         }
     }
 }

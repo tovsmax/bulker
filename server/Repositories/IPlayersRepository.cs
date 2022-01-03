@@ -9,5 +9,6 @@ namespace BasicRestAPIServer.Repositories
         Player GetPlayer(Guid id);
         IEnumerable<Player> GetPlayers();
         void CreatePlayer(Player player);
+        void UpdatePlayer(Player player);
     }
 }

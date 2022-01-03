@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BasicRestAPIServer.DTO
 {
@@ -11,6 +12,7 @@ namespace BasicRestAPIServer.DTO
 
     public record PlayerCreateDTO
     {
+        [Required]
         public string Name { get; init; }
     }
 }

@@ -5,12 +5,12 @@ using BasicRestAPIServer.Entities;
 
 namespace BasicRestAPIServer.Repositories
 {
-    public class InMemPlayersRepository
+    public class InMemPlayersRepository : IPlayersRepository
     {
         private readonly List<Player> players = new()
         {
             new Player { Id = Guid.NewGuid(), Name = "Montferrat", CreatedDate = DateTimeOffset.UtcNow },
-            new Player { Id = Guid.NewGuid(), Name = "Mao", CreatedDate = DateTimeOffset.UtcNow },
+            new Player { Id = Guid.NewGuid(), Name = "Mao",        CreatedDate = DateTimeOffset.UtcNow },
             new Player { Id = Guid.NewGuid(), Name = "Metrarkius", CreatedDate = DateTimeOffset.UtcNow }
         };
 

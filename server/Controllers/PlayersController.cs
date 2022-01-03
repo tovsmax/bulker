@@ -10,11 +10,11 @@ namespace BasicRestAPIServer.Controllers
     [Route("Players")] // REST-запросы передаются в данный контроллер, если маршрут /Players
     public class PlayersController : ControllerBase
     {
-        private readonly InMemPlayersRepository repository;
+        private readonly IPlayersRepository repository;
 
-        public PlayersController()
+        public PlayersController(IPlayersRepository repository)
         {
-            repository = new InMemPlayersRepository();
+            this.repository = repository;
         }
 
         [HttpGet] // GET /Players => GetPlayers()

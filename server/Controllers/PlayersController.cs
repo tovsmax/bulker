@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BasicRestAPIServer.Entities;
 using BasicRestAPIServer.Repositories;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BasicRestAPIServer.Controllers
 {
-    [ApiController]  // Обеспечивает, что возвращаемые данные следуют стандарту REST-ful API
+    [ApiController]    // Обеспечивает, что возвращаемые данные следуют стандарту REST-ful API
     [Route("Players")] // REST-запросы передаются в данный контроллер, если маршрут /Players
     public class PlayersController : ControllerBase
     {
@@ -21,6 +22,17 @@ namespace BasicRestAPIServer.Controllers
         {
             var players = repository.GetPlayers();
             return players;
+        }
+
+        [HttpGet("{id}")] // GET /Players/{id} => GetPlayer()
+        public ActionResult<Player> GetPlayer(Guid id)
+        {
+            var player = repository.GetPlayer(id);
+            if (player is null)
+            {
+                return NotFound();
+            }
+            return Ok(player);
         }
     }
 }

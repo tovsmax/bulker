@@ -8,4 +8,9 @@ namespace BasicRestAPIServer.DTO
         public string Name { get; init; }
         public DateTimeOffset CreatedDate { get; init; }
     }
+
+    public record PlayerCreateDTO
+    {
+        public string Name { get; init; }
+    }
 }

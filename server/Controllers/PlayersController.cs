@@ -37,5 +37,20 @@ namespace BasicRestAPIServer.Controllers
             }
             return Ok(player.AsDTO());
         }
+
+        [HttpPost] // POST /Players
+        public ActionResult<PlayerDTO> CreatePlayer(PlayerCreateDTO playerDTO)
+        {
+            Player player = new()
+            {
+                Id = Guid.NewGuid(),
+                Name = playerDTO.Name,
+                CreatedDate = DateTimeOffset.UtcNow
+            };
+
+            repository.CreatePlayer(player);
+
+            return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player.AsDTO() );
+        }
     }
 }

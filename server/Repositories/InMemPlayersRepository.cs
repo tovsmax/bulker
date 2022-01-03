@@ -23,5 +23,10 @@ namespace BasicRestAPIServer.Repositories
         {
             return players.Where(player => player.Id == id).SingleOrDefault();
         }
+
+        public void CreatePlayer(Player player)
+        {
+            players.Add(player);
+        }
     }
 }

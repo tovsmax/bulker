@@ -1,2 +1,59 @@
-# Файлы, которые будут игнорироваться с клиентской стороны.
-# Я не знаю, что у вас, dotNET-еров, нужно игнорировать.
+# Пользовательские файлы
+*.suo
+*.user
+*.sln.docstates
+
+# Результаты сборки
+[Dd]ebug/
+[Rr]elease/
+x64/
+[Bb]in/
+[Oo]bj/
+
+# Пакеты NuGet
+*.nupkg
+# Т.к. пакеты подхватываются автоматически, папку с пакетами можно игнорировать
+**/packages/*
+# ...кроме директории build, которая используется как часть MSbuild
+!**/packages/build/
+
+# Результаты тестирования MStest
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.log
+*.scc
+
+# Временные файлы Visual Studio
+.vs/
+
+# Побочные файлы .NET
+project.lock.json
+
+# VS 2015+
+*.vc.vc.opendb
+*.vc.db
+
+# Visual Studio Code
+.vscode/

@@ -43,9 +43,7 @@ namespace BasicRestAPIServer.Controllers
         {
             Player player = new()
             {
-                Id = Guid.NewGuid(),
-                Name = playerDTO.Name,
-                CreatedDate = DateTimeOffset.UtcNow
+                Name = playerDTO.Name
             };
 
             repository.CreatePlayer(player);

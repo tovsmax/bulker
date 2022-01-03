@@ -9,9 +9,9 @@ namespace BasicRestAPIServer.Repositories
     {
         private readonly List<Player> players = new()
         {
-            new Player { Id = Guid.NewGuid(), Name = "Montferrat", CreatedDate = DateTimeOffset.UtcNow },
-            new Player { Id = Guid.NewGuid(), Name = "Mao",        CreatedDate = DateTimeOffset.UtcNow },
-            new Player { Id = Guid.NewGuid(), Name = "Metrarkius", CreatedDate = DateTimeOffset.UtcNow }
+            new Player { Name = "Montferrat" },
+            new Player { Name = "Mao" },
+            new Player { Name = "Metrarkius" }
         };
 
         public IEnumerable<Player> GetPlayers()

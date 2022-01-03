@@ -34,5 +34,11 @@ namespace BasicRestAPIServer.Repositories
             var index = players.FindIndex(existingPlayer => existingPlayer.Id == player.Id);
             players[index] = player;
         }
+
+        public void DeletePlayer(Guid id)
+        {
+            var index = players.FindIndex(existingPlayer => existingPlayer.Id == id);
+            players.RemoveAt(index);
+        }
     }
 }

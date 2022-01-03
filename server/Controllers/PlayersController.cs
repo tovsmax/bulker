@@ -52,7 +52,7 @@ namespace BasicRestAPIServer.Controllers
         }
 
         [HttpPut("{id}")] // PUT /Players/{id}
-        public ActionResult UpdateItem(Guid id, PlayerUpdateDTO playerDTO)
+        public ActionResult UpdatePlayer(Guid id, PlayerUpdateDTO playerDTO)
         {
             var existingPlayer = repository.GetPlayer(id);
 
@@ -67,6 +67,21 @@ namespace BasicRestAPIServer.Controllers
             };
 
             repository.UpdatePlayer(updatedPlayer);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")] // DELETE /Players/{id}
+        public ActionResult DeletePlayer(Guid id)
+        {
+            var existingPlayer = repository.GetPlayer(id);
+
+            if (existingPlayer is null)
+            {
+                return NotFound();
+            }
+
+            repository.DeletePlayer(id);
 
             return NoContent();
         }

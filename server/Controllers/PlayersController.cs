@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using BasicRestAPIServer.DTO;
 using BasicRestAPIServer.Entities;
 using BasicRestAPIServer.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -18,21 +20,22 @@ namespace BasicRestAPIServer.Controllers
         }
 
         [HttpGet] // GET /Players => GetPlayers()
-        public IEnumerable<Player> GetPlayers()
+        public IEnumerable<PlayerDTO> GetPlayers()
         {
-            var players = repository.GetPlayers();
+            var players = repository.GetPlayers().Select( player => player.AsDTO() );
+            
             return players;
         }
 
         [HttpGet("{id}")] // GET /Players/{id} => GetPlayer()
-        public ActionResult<Player> GetPlayer(Guid id)
+        public ActionResult<PlayerDTO> GetPlayer(Guid id)
         {
             var player = repository.GetPlayer(id);
             if (player is null)
             {
                 return NotFound();
             }
-            return Ok(player);
+            return Ok(player.AsDTO());
         }
     }
 }

@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: Bulker Messanger
+  description: |
+    Базовая версия Булкера, где реализован онлайн
+    функционал и синхронизация между клиентами
+  version: 0.0.1
+paths:
+  /messages:
+    post:
+      summary: Создаёт сообщение
+      requestBody:
+        messageText:
+          type: string
+      responses:
+        '201':
+          description: Сообщение создано
+          content:
+            application/json:
+              type: object
+              properties:
+                messageText:
+                  type: string
+                id:
+                  type: integer
+                  format: int64
+
+    get:
+      description: Получить сообщения
+      responses:
+        '200':
+          description: Сообщения найдены
+          content:
+            application/json:
+              type: array
+              items:
+                type: obejct
+                properties:
+                  messageText:
+                    type: string
+                  id:
+                    type: integer
+                    format: int64
+        '404':
+          description: Сообщение не найдено

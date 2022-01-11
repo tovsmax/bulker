@@ -4,64 +4,31 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Стол Ведущего</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/initGame.css">
-  <link rel="stylesheet" href="css/gameTable.css">
-  
-  <link rel="shortcut icon" href="css/images/bunker logos/small bg.jfif" type="image/x-icon">
-  <title>Столик ведущего</title>
+  <link rel="shortcut icon" href="assets/image/icons/bulker_icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <div class="container">
-    <div id="initGameCont">
-      <div id="initGameContInner">
-        <div id="initGame">
-          <label class="tableLabel" for="cols">
-            Cols: 
-            <input type="number" name="cols" id="cols" class="tableInput" value="3" required>
-          </label>
 
-          <label class="tableLabel" for="rows">
-            Rows: 
-            <input type="number" name="rows" id="rows" class="tableInput" value="3" required>
-          </label>
-            
-          <input type="submit" id="initGameBtn" class="btn">
-        </div>
+<div class="wrapper">
+  <div class="msgsPanelsContOuter">
+    <div class="msgsPanelsContInner">
+
+      <div id="sendMessage" class="panel">
+        <label for="">Введите сообщение: <input type="text" id="msgInput"></label>
+        <button id="sendMsgBtn">Отправить</button>
       </div>
-      <div id="initGameContBorder"></div>
-    </div>
+    
+      <div id="getMessage" class="panel">
+        <button id="getMsgsBtn">Получить</button>
+      </div>
 
-    <table id="userTable" class="gameTable">
-      <colgroup>
-        <col id="rowHeaders">
-        <!-- <col class="plrCols"> -->
-        <!-- <col class="plrCols"> -->
-        <!-- <col class="plrCols"> -->
-      </colgroup>
-      <tbody>
-        <tr class="colHeaders">
-          <td id="cornerBtns">
-            <div id="presetsBtn" class="cornerBtn"></div>
-            <div id="randPlrPos" class="cornerBtn"></div>
-          </td>
-          <!-- <th class="colHeaderCell"><div class="colHeader tableHeader">col1</div></th>
-          <th class="colHeaderCell"><div class="colHeader tableHeader">col2</div></th>
-          <th class="colHeaderCell"><div class="colHeader tableHeader">col3</div></th> -->
-        </tr>
-        <!-- <tr class="charTypes">
-          <th class="rowHeaderCell"><div class="rowHeader tableHeader">row1</div></th>
-          <td class="charValueCell"><div class="charValue"></div></td>
-          <td class="charValueCell"><div class="charValue"></div></td>
-          <td class="charValueCell"><div class="charValue"></div></td>
-        </tr> -->
-      </tbody>
-    </table>
+    </div>
   </div>
-  
-  <script src="app.js"></script>
+</div>
+
+<script src="assets/js/app.js"></script>
 </body>
 </html>
-

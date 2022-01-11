@@ -6,6 +6,7 @@ const userTable = document.getElementById('userTable')
 const colHeaderNames = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 userTable.hidden = true
+initGameCont.hidden = true
 
 // createTable()
 

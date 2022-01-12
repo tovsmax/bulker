@@ -28,7 +28,8 @@ namespace BasicRestAPIServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(o => o.AddPolicy("LocalPolicy", builder => {
-                builder.WithOrigins("http://127.0.0.1:5500")
+                builder.WithOrigins("http://127.0.0.1:5500",
+                                    "http://127.0.0.1:5600")
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));

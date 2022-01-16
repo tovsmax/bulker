@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
-WORKDIR /app
+WORKDIR /server
 EXPOSE 5000
 
 ENV ASPNETCORE_URLS=http://+:5000
@@ -9,12 +9,12 @@ WORKDIR /src
 COPY ["BasicRestAPIServer.csproj", "./"]
 RUN dotnet restore "BasicRestAPIServer.csproj"
 COPY . .
-RUN dotnet build "BasicRestAPIServer.csproj" -c Release -o /app/build
+RUN dotnet build "BasicRestAPIServer.csproj" -c Release -o /server/build
 
 FROM build AS publish
-RUN dotnet publish "BasicRestAPIServer.csproj" -c Release -o /app/publish
+RUN dotnet publish "BasicRestAPIServer.csproj" -c Release -o /server/publish
 
 FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+WORKDIR /server
+COPY --from=publish /server/publish .
 ENTRYPOINT ["dotnet", "BasicRestAPIServer.dll"]

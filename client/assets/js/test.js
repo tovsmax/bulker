@@ -1,4 +1,4 @@
-const oururl = 'https://localhost:5001'
+const oururl = 'http://localhost:5000'
 
 const resource = '/Players'
 

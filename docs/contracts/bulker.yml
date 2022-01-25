@@ -1,0 +1,232 @@
+openapi: 3.0.0
+
+info:
+	version: 0.1.1
+	# [0].1.1 - release build. No release got published, so it stays at 0 for now.
+	# 0.[1].1 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
+	# 0.1.[1] - minor build. Any changes to contract increment this number.
+	title: Bulker Moderator Version
+	description: A simple API for a moderator in Bulker game. Allows only for one user with one set of rights. No need for additional sockets (like WebSocket) and authorization for now.
+
+servers:
+	- url: http://localhost:5000
+
+security:
+	- BasicAuth: []
+
+paths:
+	/Event:
+		get:
+			description: Next round shift; a new event
+			responses:
+				'200':
+					description: OK
+					content:
+						application/json:
+							schema:
+								$ref: '#/components/schemas/Event'
+
+	/GlobalTraitNames:
+		get:
+			description: Returns list of all global traits' names
+			responses:
+				'200':
+					description: OK
+					content:
+						application/json:
+							schema:
+								type: array
+								items:
+									type: string    # GlobalTrait.traitname
+
+	/GlobalTraits:
+		get:
+			description: Returns all global traits
+			responses:
+				'200':
+					description: OK
+					content:
+						application/json:
+							schema:
+								type: array
+								items:
+									$ref: '#/components/schemas/GlobalTrait'
+
+	/PlayerTraits:
+		get:
+			description: Returns all player traits' names
+			responses:
+				'200':
+					description: OK
+					content:
+						application/json:
+							schema:
+								type: array
+								items:
+									type: string
+
+	/Players:
+		get:
+			description: Returns all player traits
+			responses:
+				'200':
+					description: OK
+					content:
+						application/json:
+							schema:
+								type: array
+								items:
+									$ref: '#/components/schemas/Player'
+		post:
+			description: Adds a new player record
+			requestBody:
+				required: true
+				content:
+					application/json:
+						schema:
+							$ref: '#/components/schemas/Player'
+			responses:
+				'200':
+					description: Successfully created a new player
+					content:
+						application/json:
+							schema:
+								$ref: '#/components/schemas/Player'
+
+		delete:
+			description: Clears up completely all players' records
+			responses:
+				'204':
+					description: Successfully cleared up players' list
+
+	/Players/{id}:
+		get:
+			description: Returns a player record with some ID
+			parameters:
+				- name: id
+					in: path
+					required: true
+					schema:
+						type: uuid
+
+			responses:
+				'200':
+					description: OK
+					content:
+						application/json:
+							schema:
+								$ref: '#/components/schemas/Player'
+				'400':
+					$ref: '#/components/responses/InvalidRequest'
+				'404':
+					$ref: '#/components/responses/NotFound'
+
+		put:
+			description: Updates a player record with some ID; not all fields are required
+			parameters:
+				- name: id
+					in: path
+					required: true
+					schema:
+						type: uuid
+
+			responses:
+				'204':
+					description: OK
+				'400':
+					$ref: '#/components/responses/InvalidRequest'
+				'404':
+					$ref: '#/components/responses/NotFound'
+
+		delete:
+			description: Deletes a player record with some ID
+			parameters:
+				- name: id
+					in: path
+					required: true
+					schema:
+						type: uuid
+
+			responses:
+				'204':
+					description: OK
+				'400':
+					$ref: '#/components/responses/InvalidRequest'
+				'404':
+					$ref: '#/components/responses/NotFound'
+
+
+
+components:
+	securitySchemes:
+		BasicAuth:
+			type: http
+			scheme: basic
+
+	responses:
+		NotFound:
+			description: The specified resource was not found
+			content:
+				application/json:
+					schema:
+						$ref: '#/components/schemas/Error'
+
+		InvalidRequest:
+			description: A request didn't follow a specification (ex. got a string field instead of integer)
+			content:
+				application/json:
+					schema:
+						$ref: '#/components/schemas/Error'
+
+	schemas:
+		Error:
+			type: object
+			required:
+				- code
+				- message
+			properties:
+				code:
+					type: string
+				message:
+					type: string
+
+		Player:
+			type: object
+			required:
+				- name
+			properties:
+				id:
+					type: uuid
+					readOnly: true
+				dateCreated:
+					type: string
+					format: date-time
+					readOnly: true
+				name:
+					type: string
+				isAlive:
+					type: boolean
+				traits:
+					type: array
+					items:
+						$ref: '#/components/schemas/PlayerTrait'
+
+		Event:
+			type: string
+			nullable: true
+
+		GlobalTrait:
+			type: object
+			properties:
+				traitname:
+					type: string
+				traitvalue:
+					type: string
+
+		PlayerTrait:
+			type: object
+			properties:
+				traitname:
+					type: string
+				traitvalue:
+					type: string

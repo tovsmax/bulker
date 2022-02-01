@@ -1,0 +1,39 @@
+# GET /Players/{id}/Votes
+get:
+  description: Returns vote spree of the player {id}
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../openapi.yml#/components/schemas/VoteSpree'
+    '400':
+      $ref: '../openapi.yml#/components/responses/InvalidRequest'
+    '404':
+      $ref: '../openapi.yml#/components/responses/NotFound'
+
+# DELETE /Players/{id}/Votes
+delete:
+  description: Cleans vote spree of the player {id} (and consequentially cleans 'votedFor' pointer for players in that spree)
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '204':
+      description: OK
+    '400':
+      $ref: '../openapi.yml#/components/responses/InvalidRequest'
+    '404':
+      $ref: '../openapi.yml#/components/responses/NotFound'

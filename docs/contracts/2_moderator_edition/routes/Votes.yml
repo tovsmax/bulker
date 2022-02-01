@@ -1,0 +1,6 @@
+# DELETE /Votes
+delete:
+  description: Resets all vote sprees and 'votedFor' pointers for players
+  responses:
+    '204':
+      description: OK

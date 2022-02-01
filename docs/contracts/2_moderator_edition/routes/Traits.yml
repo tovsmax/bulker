@@ -1,0 +1,12 @@
+# GET /Traits
+get:
+  description: Returns all player traits' names
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string

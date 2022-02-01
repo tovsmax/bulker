@@ -1,0 +1,23 @@
+# GET /Players/{id}/Traits
+get:
+  description: Returns traits of the player {id}
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../openapi.yml#/components/schemas/Trait'
+    '400':
+      $ref: '../openapi.yml#/components/responses/InvalidRequest'
+    '404':
+      $ref: '../openapi.yml#/components/responses/NotFound'

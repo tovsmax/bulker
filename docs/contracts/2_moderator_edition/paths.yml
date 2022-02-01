@@ -1,400 +1,63 @@
-/Event:
-  get:
-    description: Next round shift; a new event
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Event'
-
-#################################
-# Механики условий мира/бункера #
-#################################
-/Conditions:
-  get:
-    description: Returns all world conditions (global traits)
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: './openapi.yml#/components/schemas/Trait'
-/Conditions/{codename}:
-  get:
-    description: Returns details of condition {codename}
-    parameters:
-      - name: codename
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Trait'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  put:
-    description: Updates condition {codename}
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: './openapi.yml#/components/schemas/Trait'
-    parameters:
-      - name: codename
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      '204':
-        description: OK
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  delete:
-    description: Randomizes condition {codename}
-    parameters:
-      - name: codename
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Trait'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-/Traits:
-  get:
-    description: Returns all player traits' names
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
-
 ###############################
 # Общая информация об игроках #
 ###############################
+
+# Игроки: получение общей информации, добавление игрока, очищение всех записей
 /Players:
-  get:
-    description: Returns all player traits
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: './openapi.yml#/components/schemas/Player'
-  post:
-    description: Adds a new player record
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: './openapi.yml#/components/schemas/Player'
-    responses:
-      '200':
-        description: Successfully created a new player
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Player'
-  delete:
-    description: Clears up completely all players' records
-    responses:
-      '204':
-        description: Successfully cleared up players' list
+  $ref: "routes/Players.yml"
+
+# Игрок {id}: получение общей информации, обновление игрока, удаление игрока
 /Players/{id}:
-  get:
-    description: Returns details about the player {id}
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Player'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  put:
-    description: Updates the player {id}; not all fields are required
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: './openapi.yml#/components/schemas/Player'
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '204':
-        description: OK
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  delete:
-    description: Deletes the player {id}
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '204':
-        description: OK
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-/Votes:
-  delete:
-    description: Resets all vote sprees and 'voted' flags for players
-    responses:
-      '204':
-        description: OK
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
+  $ref: "routes/PlayersID.yml"
+
+################
+# Условия мира #
+################
+
+# Условия мира: получение
+/Conditions:
+  $ref: "routes/Conditions.yml"
+
+# Условие мира {codename}: получение, обновление, рандомизация
+/Conditions/{codename}:
+  $ref: "routes/ConditionsCodename.yml"
+
+#########################
+# Характеристики игрока #
+#########################
+
+# Черты игроков: получение названий
+/Traits:
+  $ref: "routes/Traits.yml"
+
+# Черты игрока {id}: получение
+/Players/{id}/Traits:
+  $ref: "routes/PlayersIDTraits.yml"
+
+# Черта {codename} игрока {id}: получение, обновление, рандомизация
+/Players/{id}/Traits/{codename}:
+  $ref: "routes/PlayersIDTraitsCodename.yml"
 
 ########################
 # Механики голосования #
 ########################
-/Player/{id}/Votes:
-  get:
-    description: Returns vote spree of the player {id}
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/VoteSpree'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  delete:
-    description: Cleans vote spree of the player {id} (and consequentially cleans 'votedFor' pointer for players in that spree)
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '204':
-        description: OK
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-/Player/{subjectid}/Vote/{objectid}:
-  put:
-    description: Puts vote of player {subjectid} on player {objectid}; updates 'votedFor' pointer for {subjectid}, adds {subjectid} in vote spree of {objectid} (and returns it)
-    parameters:
-      - name: subjectid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: objectid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/VoteSpree'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  delete:
-    description: Removes vote of player {subjectid} on player {objectid}; nullifies 'votedFor' pointer for {subjectid}, deletes {subjectid} in vote spree of {objectid} (and returns it, if {objectid} is given)
-    parameters:
-      - name: subjectid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: objectid
-        in: path
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/VoteSpree'
-      '204':
-        description: No Content
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
 
-#################################
-# Механики характеристик игрока #
-#################################
-/Players/{id}/Traits:
-  get:
-    description: Returns traits of the player {id}
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: './openapi.yml#/components/schemas/Trait'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-/Players/{id}/Traits/{codename}:
-  get:
-    description: Returns details of trait {codename} of player {id}
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: codename
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Trait'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  put:
-    description: Updates trait {codename} of player {id}
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: './openapi.yml#/components/schemas/Trait'
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: codename
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      '204':
-        description: OK
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
-  delete:
-    description: Randomizes trait {codename} of player {id}
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: codename
-        in: path
-        required: true
-        schema:
-          type: string
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: './openapi.yml#/components/schemas/Trait'
-      '400':
-        $ref: './openapi.yml#/components/responses/InvalidRequest'
-      '404':
-        $ref: './openapi.yml#/components/responses/NotFound'
+# Голоса: удаление всех голосов
+/Votes:
+  $ref: "routes/Votes.yml"
+
+# Голоса за игрока {id}
+/Player/{id}/Votes:
+  $ref: "routes/PlayersIDVotes.yml"
+
+# Голос игрока {subjectid} за игрока {objectid}
+/Player/{subjectid}/Vote/{objectid}:
+  $ref: "routes/PlayersIDVoteID.yml"
+
+##########
+# Ивенты #
+##########
+
+# Ивент: получение нового ивента
+/Event:
+  $ref: "routes/Event.yml"

@@ -1,12 +1,15 @@
 openapi: 3.0.0
 
 info:
-  version: 0.1.1
-  # [0].1.1 - release build. No release got published, so it stays at 0 for now.
-  # 0.[1].1 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
-  # 0.1.[1] - minor build. Any changes to contract increment this number.
+  version: 0.1.2
+  # [0].1.2 - release build. No release got published, so it stays at 0 for now.
+  # 0.[1].2 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
+  # 0.1.[2] - minor build. Any changes to contract increment this number (once per push).
   title: Bulker Moderator Version
   description: A simple API for a moderator in Bulker game. Allows only for one user with one set of rights. No need for additional sockets (like WebSocket) and authorization for now.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
   - url: http://localhost:5000
@@ -26,9 +29,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Event'
 
-  /GlobalTraitNames:
+  #################################
+  # Механики условий мира/бункера #
+  #################################
+  /Conditions:
     get:
-      description: Returns list of all global traits' names
+      description: Returns all world conditions (global traits)
       responses:
         '200':
           description: OK
@@ -37,22 +43,74 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string    # GlobalTrait.traitname
+                  $ref: '#/components/schemas/Trait'
 
-  /GlobalTraits:
+  /Conditions/{codename}:
     get:
-      description: Returns all global traits
+      description: Returns details of condition {codename}
+      parameters:
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GlobalTrait'
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
-  /PlayerTraits:
+    put:
+      description: Updates condition {codename}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trait'
+      parameters:
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Randomizes condition {codename}
+      parameters:
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /Traits:
     get:
       description: Returns all player traits' names
       responses:
@@ -65,6 +123,9 @@ paths:
                 items:
                   type: string
 
+  ###############################
+  # Общая информация об игроках #
+  ###############################
   /Players:
     get:
       description: Returns all player traits
@@ -77,6 +138,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Player'
+
     post:
       description: Adds a new player record
       requestBody:
@@ -101,7 +163,7 @@ paths:
 
   /Players/{id}:
     get:
-      description: Returns a player record with some ID
+      description: Returns details about the player {id}
       parameters:
         - name: id
           in: path
@@ -122,7 +184,12 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     put:
-      description: Updates a player record with some ID; not all fields are required
+      description: Updates the player {id}; not all fields are required
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
       parameters:
         - name: id
           in: path
@@ -139,7 +206,7 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     delete:
-      description: Deletes a player record with some ID
+      description: Deletes the player {id}
       parameters:
         - name: id
           in: path
@@ -155,6 +222,219 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /Votes:
+    delete:
+      description: Resets all vote sprees and 'voted' flags for players
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  ########################
+  # Механики голосования #
+  ########################
+  /Player/{id}/Votes:
+    get:
+      description: Returns vote spree of the player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteSpree'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Cleans vote spree of the player {id} (and consequentially cleans 'votedFor' pointer for players in that spree)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /Player/{subjectid}/Vote/{objectid}:
+    put:
+      description: Puts vote of player {subjectid} on player {objectid}; updates 'votedFor' pointer for {subjectid}, adds {subjectid} in vote spree of {objectid} (and returns it)
+      parameters:
+        - name: subjectid
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: objectid
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteSpree'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Removes vote of player {subjectid} on player {objectid}; nullifies 'votedFor' pointer for {subjectid}, deletes {subjectid} in vote spree of {objectid} (and returns it, if {objectid} is given)
+      parameters:
+        - name: subjectid
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: objectid
+          in: path
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteSpree'
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  #################################
+  # Механики характеристик игрока #
+  #################################
+  /Players/{id}/Traits:
+    get:
+      description: Returns traits of the player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /Players/{id}/Traits/{codename}:
+    get:
+      description: Returns details of trait {codename} of player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      description: Updates trait {codename} of player {id}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trait'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Randomizes trait {codename} of player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
 
 components:
@@ -206,27 +486,42 @@ components:
           type: string
         isAlive:
           type: boolean
+        age:
+          type: integer
+        gender:
+          type: string
+          enum: [male, female]
+        isFertile:
+          type: boolean
+        votedFor:
+          type: ['null', uuid]
+        voteSpree:
+          $ref: '#/components/schemas/VoteSpree'
         traits:
           type: array
           items:
-            $ref: '#/components/schemas/PlayerTrait'
+            $ref: '#/components/schemas/Trait'
 
     Event:
-      type: string
-      nullable: true
+      type: ['null', string]
 
-    GlobalTrait:
+    Trait:
       type: object
+      required:
+        - codename
       properties:
-        traitname:
+        codename:
           type: string
-        traitvalue:
+          readOnly: true
+        name:
           type: string
+          readOnly: true
+        value:
+          type: array
+          items:
+            type: string
 
-    PlayerTrait:
-      type: object
-      properties:
-        traitname:
-          type: string
-        traitvalue:
-          type: string
+    VoteSpree:
+      type: array
+      items:
+        type: guid

@@ -26,9 +26,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Event'
 
-  /GlobalTraits:
+  /Conditions:
     get:
-      description: Returns all global traits
+      description: Returns all world conditions (global traits)
       responses:
         '200':
           description: OK
@@ -37,9 +37,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GlobalTrait'
+                  $ref: '#/components/schemas/Condition'
 
-  /PlayerTraits:
+  /Traits:
     get:
       description: Returns all player traits' names
       responses:
@@ -196,13 +196,13 @@ components:
         traits:
           type: array
           items:
-            $ref: '#/components/schemas/PlayerTrait'
+            $ref: '#/components/schemas/Trait'
 
     Event:
       type: string
       nullable: true
 
-    GlobalTrait:
+    Condition:
       type: object
       properties:
         traitname:
@@ -210,7 +210,7 @@ components:
         traitvalue:
           type: string
 
-    PlayerTrait:
+    Trait:
       type: object
       properties:
         traitname:

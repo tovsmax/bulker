@@ -154,7 +154,7 @@ paths:
 
   /Players/{id}:
     get:
-      description: Returns a player record with some ID
+      description: Returns details about the player {id}
       parameters:
         - name: id
           in: path
@@ -175,7 +175,7 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     put:
-      description: Updates a player record with some ID; not all fields are required
+      description: Updates the player {id}; not all fields are required
       requestBody:
         content:
           application/json:
@@ -197,7 +197,7 @@ paths:
           $ref: '#/components/responses/NotFound'
 
     delete:
-      description: Deletes a player record with some ID
+      description: Deletes the player {id}
       parameters:
         - name: id
           in: path
@@ -213,9 +213,113 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /Votes:
+    delete:
+      description: Resets all vote sprees and 'voted' flags for players
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /Player/{id}/Votes:
+    get:
+      description: Returns vote spree of the player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteSpree'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Cleans vote spree of the player {id} (and consequentially cleans 'votedFor' pointer for players in that spree)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /Player/{subjectid}/Vote/{objectid}:
+    put:
+      description: Puts vote of player {subjectid} on player {objectid}; updates 'votedFor' pointer for {subjectid}, adds {subjectid} in vote spree of {objectid} (and returns it)
+      parameters:
+        - name: subjectid
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: objectid
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteSpree'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Removes vote of player {subjectid} on player {objectid}; nullifies 'votedFor' pointer for {subjectid}, deletes {subjectid} in vote spree of {objectid} (and returns it, if {objectid} is given)
+      parameters:
+        - name: subjectid
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: objectid
+          in: path
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteSpree'
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
   /Players/{id}/Traits:
     get:
-      description: Returns traits of a player record with some ID
+      description: Returns traits of the player {id}
       parameters:
         - name: id
           in: path
@@ -304,7 +408,7 @@ paths:
           required: true
           schema:
             type: string
-            
+
       responses:
         '200':
           description: OK
@@ -374,14 +478,17 @@ components:
           enum: [male, female]
         isFertile:
           type: boolean
+        votedFor:
+          type: ['null', uuid]
+        voteSpree:
+          $ref: '#/components/schemas/VoteSpree'
         traits:
           type: array
           items:
             $ref: '#/components/schemas/Trait'
 
     Event:
-      type: string
-      nullable: true
+      type: ['null', string]
 
     Trait:
       type: object
@@ -398,3 +505,8 @@ components:
           type: array
           items:
             type: string
+
+    VoteSpree:
+      type: array
+      items:
+        type: guid

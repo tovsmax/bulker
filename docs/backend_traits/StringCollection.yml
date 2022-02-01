@@ -1,0 +1,15 @@
+StringCollection:
+  in:
+    extractCount:
+      type: integer
+      min: 1
+    traits:
+      type: array
+      items:
+        type: string
+  out:
+    summary: 'Массив размера {extractCount} из элементов, извлекаемых из {traits}'
+    type: array
+    size: extractCount
+    items:
+      type: string

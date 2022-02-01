@@ -2,9 +2,9 @@ openapi: 3.0.0
 
 info:
   version: 0.1.2
-  # [0].1.1 - release build. No release got published, so it stays at 0 for now.
-  # 0.[1].1 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
-  # 0.1.[2] - minor build. Any changes to contract increment this number.
+  # [0].1.2 - release build. No release got published, so it stays at 0 for now.
+  # 0.[1].2 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
+  # 0.1.[2] - minor build. Any changes to contract increment this number (once per push).
   title: Bulker Moderator Version
   description: A simple API for a moderator in Bulker game. Allows only for one user with one set of rights. No need for additional sockets (like WebSocket) and authorization for now.
 
@@ -37,7 +37,72 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Condition'
+                  $ref: '#/components/schemas/Trait'
+
+  /Conditions/{codename}:
+    get:
+      description: Returns details of condition {codename}
+      parameters:
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      description: Updates condition {codename}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trait'
+      parameters:
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Randomizes condition {codename}
+      parameters:
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /Traits:
     get:
@@ -64,6 +129,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Player'
+
     post:
       description: Adds a new player record
       requestBody:
@@ -110,6 +176,11 @@ paths:
 
     put:
       description: Updates a player record with some ID; not all fields are required
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
       parameters:
         - name: id
           in: path
@@ -142,6 +213,109 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /Players/{id}/Traits:
+    get:
+      description: Returns traits of a player record with some ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /Players/{id}/Traits/{codename}:
+    get:
+      description: Returns details of trait {codename} of player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      description: Updates trait {codename} of player {id}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trait'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      description: Randomizes trait {codename} of player {id}
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: uuid
+        - name: codename
+          in: path
+          required: true
+          schema:
+            type: string
+            
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trait'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
 
 components:
@@ -209,22 +383,18 @@ components:
       type: string
       nullable: true
 
-    Condition:
-      type: object
-      properties:
-        traitname:
-          type: string
-        traitvalue:
-          type: array
-          items:
-            type: string
-
     Trait:
       type: object
+      required:
+        - codename
       properties:
-        traitname:
+        codename:
           type: string
-        traitvalue:
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        value:
           type: array
           items:
             type: string

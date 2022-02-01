@@ -1,6 +1,6 @@
 # Bulker: веб-версия известной настольной игры
 
-![Логотип Bulker](./docs/bulker_300.png)
+![Логотип Bulker](./docs/img/bulker_300.png)
 
 ## Содержание
 

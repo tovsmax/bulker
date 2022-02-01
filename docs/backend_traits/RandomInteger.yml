@@ -1,0 +1,9 @@
+RandomInteger:
+  in:
+    min:
+      type: integer
+    max:
+      type: integer
+  out:
+    summary: 'Случайное число из интервала [{min}; {max}]. Распределение равномерное.'
+    type: integer

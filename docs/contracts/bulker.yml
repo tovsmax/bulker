@@ -193,6 +193,13 @@ components:
           type: string
         isAlive:
           type: boolean
+        age:
+          type: integer
+        gender:
+          type: string
+          enum: [male, female]
+        isFertile:
+          type: boolean
         traits:
           type: array
           items:

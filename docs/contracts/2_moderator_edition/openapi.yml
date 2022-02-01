@@ -1,0 +1,43 @@
+openapi: "3.1.0"
+
+info:
+  version: 0.1.3
+  # [0].1.3 - release build. No release got published, so it stays at 0 for now.
+  # 0.[1].3 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
+  # 0.1.[3] - minor build. Any changes to contract increment this number (once per push).
+  title: Bulker Moderator Version
+  description: A simple API for a moderator in Bulker game. Allows only for one user with one set of rights. No need for additional sockets (like WebSocket) and authorization for now.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:5000
+    description: local
+
+security:
+  - BasicAuth: []
+
+paths:
+  $ref: "paths.yml"
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    $ref: "components.yml"
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InvalidRequest:
+      description: A request didn't follow a specification (ex. got a string field instead of integer)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

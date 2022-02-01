@@ -7,6 +7,9 @@ info:
   # 0.1.[2] - minor build. Any changes to contract increment this number (once per push).
   title: Bulker Moderator Version
   description: A simple API for a moderator in Bulker game. Allows only for one user with one set of rights. No need for additional sockets (like WebSocket) and authorization for now.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
   - url: http://localhost:5000

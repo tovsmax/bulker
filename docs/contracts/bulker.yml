@@ -208,7 +208,9 @@ components:
         traitname:
           type: string
         traitvalue:
-          type: string
+          type: array
+          items:
+            type: string
 
     Trait:
       type: object
@@ -216,4 +218,6 @@ components:
         traitname:
           type: string
         traitvalue:
-          type: string
+          type: array
+          items:
+            type: string

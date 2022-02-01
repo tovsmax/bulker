@@ -46,12 +46,12 @@
 /Votes:
   $ref: "routes/Votes.yml"
 
-# Голоса за игрока {id}
-/Player/{id}/Votes:
+# Голоса за игрока {id}: получение, удаление всех голосов
+/Players/{id}/Votes:
   $ref: "routes/PlayersIDVotes.yml"
 
-# Голос игрока {subjectid} за игрока {objectid}
-/Player/{subjectid}/Vote/{objectid}:
+# Голос игрока {subjectid} за игрока {objectid}: подача голоса (с отменой предыдущего), отмена голоса
+/Players/{subjectid}/Vote/{objectid}:
   $ref: "routes/PlayersIDVoteID.yml"
 
 ##########

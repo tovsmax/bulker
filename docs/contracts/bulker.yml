@@ -29,6 +29,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Event'
 
+  #################################
+  # Механики условий мира/бункера #
+  #################################
   /Conditions:
     get:
       description: Returns all world conditions (global traits)
@@ -120,6 +123,9 @@ paths:
                 items:
                   type: string
 
+  ###############################
+  # Общая информация об игроках #
+  ###############################
   /Players:
     get:
       description: Returns all player traits
@@ -227,6 +233,9 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  ########################
+  # Механики голосования #
+  ########################
   /Player/{id}/Votes:
     get:
       description: Returns vote spree of the player {id}
@@ -320,6 +329,9 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  #################################
+  # Механики характеристик игрока #
+  #################################
   /Players/{id}/Traits:
     get:
       description: Returns traits of the player {id}

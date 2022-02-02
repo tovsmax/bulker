@@ -1,7 +1,7 @@
-openapi: "3.1.0"
+openapi: '3.0.3'
 
 info:
-  version: 0.1.3
+  version: '0.1.3'
   # [0].1.3 - release build. No release got published, so it stays at 0 for now.
   # 0.[1].3 - a milestone in development. As of current roadmap, Milestone 1 is Moderator Version, and Milestone 2 would be Player Version.
   # 0.1.[3] - minor build. Any changes to contract increment this number (once per push).
@@ -19,7 +19,69 @@ security:
   - BasicAuth: []
 
 paths:
-  $ref: "paths.yml"
+  ###############################
+  # Общая информация об игроках #
+  ###############################
+
+  # Игроки: получение общей информации, добавление игрока, очищение всех записей
+  /Players:
+    $ref: "routes/Players.yml"
+
+  # Игрок {id}: получение общей информации, обновление игрока, удаление игрока
+  /Players/{id}:
+    $ref: "routes/PlayersID.yml"
+
+  ################
+  # Условия мира #
+  ################
+
+  # Условия мира: получение
+  /Conditions:
+    $ref: "routes/Conditions.yml"
+
+  # Условие мира {codename}: получение, обновление, рандомизация
+  /Conditions/{codename}:
+    $ref: "routes/ConditionsCodename.yml"
+
+  #########################
+  # Характеристики игрока #
+  #########################
+
+  # Черты игроков: получение названий
+  /Traits:
+    $ref: "routes/Traits.yml"
+
+  # Черты игрока {id}: получение
+  /Players/{id}/Traits:
+    $ref: "routes/PlayersIDTraits.yml"
+
+  # Черта {codename} игрока {id}: получение, обновление, рандомизация
+  /Players/{id}/Traits/{codename}:
+    $ref: "routes/PlayersIDTraitsCodename.yml"
+
+  ########################
+  # Механики голосования #
+  ########################
+
+  # Голоса: удаление всех голосов
+  /Votes:
+    $ref: "routes/Votes.yml"
+
+  # Голоса за игрока {id}: получение, удаление всех голосов
+  /Players/{id}/Votes:
+    $ref: "routes/PlayersIDVotes.yml"
+
+  # Голос игрока {subjectid} за игрока {objectid}: подача голоса (с отменой предыдущего), отмена голоса
+  /Players/{subjectid}/Vote/{objectid}:
+    $ref: "routes/PlayersIDVoteID.yml"
+
+  ##########
+  # Ивенты #
+  ##########
+
+  # Ивент: получение нового ивента
+  /Event:
+    $ref: "routes/Event.yml"
 
 components:
   securitySchemes:

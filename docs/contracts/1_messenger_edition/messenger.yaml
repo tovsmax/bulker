@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Bulker Messanger
+  title: Bulker Messenger
   description: |
     Базовая версия Булкера, где реализован онлайн
     функционал и синхронизация между клиентами

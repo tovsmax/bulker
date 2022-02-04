@@ -1,0 +1,36 @@
+# GET /Players
+get:
+  description: Returns all player traits
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../openapi.yml#/components/schemas/Player'
+
+# POST /Players
+post:
+  description: Adds a new player record
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../openapi.yml#/components/schemas/Player'
+  responses:
+    '200':
+      description: Successfully created a new player
+      content:
+        application/json:
+          schema:
+            $ref: '../openapi.yml#/components/schemas/Player'
+
+# DELETE /Players
+delete:
+  description: Clears up completely all players' records
+  responses:
+    '204':
+      description: Successfully cleared up players' list

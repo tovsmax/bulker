@@ -8,7 +8,7 @@ const colHeaderNames = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 userTable.hidden = true
 initGameCont.hidden = true
 
-// createTable()
+createTable()
 
 initGameBtn.addEventListener('click', createTable)
 

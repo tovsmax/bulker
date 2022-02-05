@@ -7,5 +7,3 @@ async function getPlayers () {
     .then(res => res.json())
     .then(json => console.log(json))
 }
-
-getPlayers()

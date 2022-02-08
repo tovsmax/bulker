@@ -2,7 +2,8 @@
 // tableInputs = (tableInputs.length) ? tableInputs : [{value: 6}, {value: 8}]
 
 const userTable = document.getElementById('userTable')
-const curPlrInd = 1
+
+const curPlrInd = 0
 
 const dataDict = {
   'Био':             ['test data'],
@@ -14,16 +15,12 @@ const dataDict = {
   'Доп. инфа':       appendixes,
   'Багаж':           equips
 }
-
 const rowHeaderNames = Object.keys(dataDict)
 
-const tableWidth = 3 // начальное кол-во игроков!!!
-const tableHeight = rowHeaderNames.length
+const TABLE_INIT_WIDTH = 5 // начальное кол-во игроков!!!
+let curTableWidth = 0
+const TABLE_HEIGHT = rowHeaderNames.length
 
-/**
- * 
- * @param {HTMLElement} elem
- */
 function textFitWithDefaultParams (elem) {
   textFit(elem, {
     alignHoriz: true,
@@ -45,46 +42,21 @@ function disableCells(cellList) {
   })
 }
 
-function enableCells(cellList) {
-
-}
-
 function createTable () {
-  // const colHeaderNames = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  const colHeaderNames = [
-    'Мао',
-    'Моня',
-    'Магнус',
-    'Мао',
-    'Моня',
-    'Магнус',
-  ]
-  const colgroup = userTable.querySelector('colgroup')
-  const colHeaders = userTable.querySelector('.colHeaders')
-  for (let colInd = 0; colInd < tableWidth; colInd++) {
-    colgroup.innerHTML += '<col class="plrCols">'
-    colHeaders.innerHTML += `<th class="colHeaderCell"><div class="colHeader tableHeader">${colHeaderNames[colInd]}</div></th>`
-  }
-
   const tbody = userTable.querySelector('tbody')
-  for (let rowInd = 0; rowInd < tableHeight; rowInd++) {
-    const row = document.createElement('tr')
-    row.className = 'charTypes'
+  for (let rowInd = 0; rowInd < TABLE_HEIGHT; rowInd++) {
+    const tableRow = document.createElement('tr')
+    tableRow.className = 'charTypes'
+    tableRow.innerHTML = `<th class="rowHeaderCell"><div class="rowHeader tableHeader">${rowHeaderNames[rowInd]}</div></th>`
 
-    const curCharName = rowHeaderNames[rowInd]
-    row.innerHTML = `<th class="rowHeaderCell"><div class="rowHeader tableHeader">${curCharName}</div></th>`
-    
-    for (let colInd = 0; colInd < tableWidth; colInd++) {
-      
-      const ownerClass = (colInd === curPlrInd) ? ' curPlr' : ''
-      row.innerHTML += `<td class="charValueCell"><div class="charValue${ownerClass}"></div></td>`
-    }
-
-    tbody.appendChild(row)
+    tbody.appendChild(tableRow)
   }
 
-  const tableHeaderList = userTable.querySelectorAll('.tableHeader')
-  textFitWithDefaultParams(tableHeaderList)
+  textFitWithDefaultParams(tbody.querySelectorAll('.rowHeader'))
+
+  for (let colInd = 0; colInd < TABLE_INIT_WIDTH; colInd++) {
+    addNewPlr(colInd)
+  }
   
   userTable.hidden = false
 }
@@ -99,8 +71,26 @@ function fillData() {
       const curCharRecord = curCharDataList[rnd(0, curCharDataList.length-1)]
       charValue.innerHTML = curCharRecord
     }
-    
   }
-  const charValueList = userTable.querySelectorAll('.charValue')
-  textFitWithDefaultParams(charValueList)
+  textFitWithDefaultParams(userTable.querySelectorAll('.charValue'))
+}
+
+function addNewPlr(colInd) {
+  const colgroup = userTable.querySelector('colgroup')
+  const colHeaders = userTable.querySelector('.colHeaders')
+  
+  colgroup.innerHTML += '<col class="plrCols">'
+  colHeaders.innerHTML += `<th class="colHeaderCell"><div class="colHeader tableHeader">________</div></th>`
+  
+  const lastTableHeader = userTable.querySelector('.colHeaders>th:last-child>.colHeader')
+  textFitWithDefaultParams(lastTableHeader)
+
+  const tableRows = document.querySelectorAll('tr')
+  for (let rowInd = 1; rowInd <= TABLE_HEIGHT; rowInd++) {
+    const curPlrClass = (colInd === 0) ? ' curPlr' : ''
+    tableRows[rowInd].innerHTML += `<td class="charValueCell"><div class="charValue${curPlrClass}"></div></td>`
+  }
+
+  addTableInteractions()
+  curTableWidth++
 }

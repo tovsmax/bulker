@@ -1,4 +1,4 @@
-function showContextMenu(event, texts) {
+function showContextMenu(event, cardActionsDict) {
   const oldCM = document.querySelector('.contextMenu')
   if (oldCM) {
     oldCM.remove()
@@ -7,13 +7,14 @@ function showContextMenu(event, texts) {
   contextMenu.classList.add('contextMenu')
 
 
-  const cmItems = []
-  for (let i = 0; i < texts.length; i++) {
-    cmItems.push(document.createElement('div'))
-    cmItems[i].innerHTML = texts[i]
-    cmItems[i].classList.add('cmItem')
-  }      
-  contextMenu.append(...cmItems)
+  for (const [cardActionName, cardActionFunc] of Object.entries(cardActionsDict)) {
+    const newCMItem = document.createElement('div')
+    newCMItem.innerHTML = cardActionName
+    newCMItem.onclick = cardActionFunc
+    newCMItem.classList.add('cmItem')
+
+    contextMenu.append(newCMItem)
+  }  
 
   contextMenu.style.top  = event.y + contextMenu.offsetHeight > window.innerHeight ? window.innerHeight - contextMenu.offsetHeight : event.y + 'px'
   contextMenu.style.left = event.x + contextMenu.offsetWidth > window.innerWidth ? window.innerWidth - contextMenu.offsetWidth : event.x     + 'px'
@@ -77,6 +78,15 @@ function addCharValueActs() {
   })
 }
 
+function addCM(selector, cardActionsDict) {
+  const elemList = document.querySelectorAll(selector)
+  elemList.forEach(elem => {
+    elem.oncontextmenu = event => {
+      showContextMenu(event, cardActionsDict)
+    }
+  })
+}
+
 function addCharValueCM() {
   const charValueList = document.querySelectorAll('.charValue')
   charValueList.forEach(charValue => {
@@ -102,7 +112,8 @@ function addColHeadersCM() {
   colHeaderList.forEach(colHeader => {
     colHeader.oncontextmenu = e => {
       const colHeaderTexts = [
-        'Проголосовать'
+        'Добавить игрока'
+        // 'Проголосовать',
       ]
 
       showContextMenu(e, colHeaderTexts)
@@ -125,9 +136,25 @@ function addRowHeadersCM() {
 
 function addTableInteractions() {
   addCharValueActs()
-  addCharValueCM()
-  addColHeadersCM()
+  // addCharValueCM()
+  // addColHeadersCM()
   addRowHeadersCM()
+
+  addCM('.charValue[class="curPlr"]', {
+    'Обменять хар-ку с игроком': null,
+    'Изменить хар-ку': null
+  })
+
+  addCM('.charValue', {
+    'Скопировать хар-ку': null,
+    'Раскрыть хар-ку': null,
+    'Вылечить': null,
+    'Изменить хар-ку \nдругого игрока': null,
+  })
+
+  addCM('.colHeader', {
+    'Добавить игрока': addNewPlr
+  })
 }
 
 function nextTurn() {
@@ -142,7 +169,7 @@ function nextTurn() {
 
   curPlrTraitIndList.forEach(ind => {
     charValueList[ind].classList.remove('curPlr')
-    const nextInd = (ind + 1) % (tableWidth * tableHeight)
+    const nextInd = (ind + 1) % (curTableWidth * TABLE_HEIGHT)
     charValueList[nextInd].classList.add('curPlr')
   })
 }

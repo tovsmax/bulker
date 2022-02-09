@@ -55,40 +55,31 @@ function createTable () {
   textFitWithDefaultParams(tbody.querySelectorAll('.rowHeader'))
 
   for (let colInd = 0; colInd < TABLE_INIT_WIDTH; colInd++) {
-    addNewPlr(colInd)
+    addNewPlr()
   }
   
   userTable.hidden = false
 }
 
-function fillData() {
-  const rows = userTable.querySelectorAll('.charTypes')
-  for (const row of rows) {
-    const curCharName = row.querySelector('.rowHeaderCell').querySelector('.rowHeader').querySelector('.textFitted').innerHTML
-    const curCharDataList = dataDict[curCharName]
-
-    for (const charValue of row.querySelectorAll('.charValue')) {
-      const curCharRecord = curCharDataList[rnd(0, curCharDataList.length-1)]
-      charValue.innerHTML = curCharRecord
-    }
-  }
-  textFitWithDefaultParams(userTable.querySelectorAll('.charValue'))
-}
-
-function addNewPlr(colInd) {
+function addNewPlr() {
   const colgroup = userTable.querySelector('colgroup')
   const colHeaders = userTable.querySelector('.colHeaders')
   
   colgroup.innerHTML += '<col class="plrCols">'
-  colHeaders.innerHTML += `<th class="colHeaderCell"><div class="colHeader tableHeader">________</div></th>`
+  const curPlrQTY = document.querySelectorAll('.colHeader').length + 1
+  colHeaders.innerHTML += `
+    <th class="colHeaderCell">
+      <div class="colHeader tableHeader">
+        <input class="plrNameInput" value="Игрок ${curPlrQTY}">
+      </div>
+    </th>`
   
-  const lastTableHeader = userTable.querySelector('.colHeaders>th:last-child>.colHeader')
-  textFitWithDefaultParams(lastTableHeader)
+  // const lastTableHeader = userTable.querySelector('.colHeaders>th:last-child>.colHeader')
+  // textFitWithDefaultParams(lastTableHeader)
 
   const tableRows = document.querySelectorAll('tr')
   for (let rowInd = 1; rowInd <= TABLE_HEIGHT; rowInd++) {
-    const curPlrClass = (colInd === 0) ? ' curPlr' : ''
-    tableRows[rowInd].innerHTML += `<td class="charValueCell"><div class="charValue${curPlrClass}"></div></td>`
+    tableRows[rowInd].innerHTML += `<td class="charValueCell"><div class="charValue"></div></td>`
   }
 
   addTableInteractions()

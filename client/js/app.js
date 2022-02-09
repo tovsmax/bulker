@@ -1,16 +1,16 @@
-// const msgsPanels = document.querySelector(".msgsPanelsContOuter")
-// msgsPanels.hidden = true
+// Initial stage
 
-const moderTools = document.querySelector('.moderTools')
-moderTools.hidden = true
-
-userTable.hidden = false
+document.querySelector('.moderTools').hidden = true
 
 createTable()
 
 addTableInteractions()
 
-fillData()
+// Begin game
+
+// beginGame()
+
+// fillData()
 
 
 // nextTurn()

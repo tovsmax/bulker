@@ -4,7 +4,7 @@ document.querySelector('.moderTools').hidden = true
 
 createTable()
 
-addTableInteractions()
+// addInitalTableInteractions()
 
 // Begin game
 

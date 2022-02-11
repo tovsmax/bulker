@@ -36,6 +36,13 @@ th {
   background-color: #e7e7e7;
   color: black;
   z-index: 0;
+  transition: box-shadow .3 linear;
+}
+
+.charValue:hover {
+  box-shadow: 0px 0px 8px 3px #b7b7b7;
+  position: relative;
+  z-index: 10;
 }
 
 /* Для игроков */

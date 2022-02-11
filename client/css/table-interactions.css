@@ -53,7 +53,15 @@
   z-index: 1; /* нужно добавить аттрибут position. ИЛИ НЕ НУЖНО, ХЗ */
 }
 
-.curPlr:hover, .selectedRow {
-  box-shadow: 0px 0px 8px 3px #b7b7b7;
-  z-index: 10; /* нужно добавить аттрибут position. ИЛИ НЕ НУЖНО, ХЗ */
+.selectedRow {
+  box-shadow : 
+    0px 2px 0px 0px #ffcb29, 
+    0px -2px 0px 0px #ffcb29;
+  z-index: 1;
+}
+
+.changedTrait {
+  box-shadow: 0px 0px 8px 3px #ffcb29;
+  position: relative;
+  z-index: 10;
 }

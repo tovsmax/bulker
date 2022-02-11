@@ -10,7 +10,7 @@ function showContextMenu(event, cardActionsDict) {
   for (const [cardActionName, cardActionFunc] of Object.entries(cardActionsDict)) {
     const newCMItem = document.createElement('div')
     newCMItem.innerHTML = cardActionName
-    newCMItem.onclick = () => cardActionFunc(event)
+    newCMItem.onclick = () => cardActionFunc(event.target)
     newCMItem.classList.add('cmItem')
 
     contextMenu.append(newCMItem)
@@ -29,28 +29,28 @@ function showContextMenu(event, cardActionsDict) {
   }
 }
 
+/**
+ * 
+ * @param {HTMLElement} target 
+ * @returns {HTMLElement} target
+ */
+function getCell(target) {
+  if (target.className.includes('textFitted')) {
+    return target.closest('.charValue')
+  } else {
+    return target
+  }
+}
+
 function addCharValueActs() {
   const charValueList = document.querySelectorAll('.charValue')
   charValueList.forEach(charValue => {
-    /**
-     * 
-     * @param {*} e 
-     * @returns Node
-     */
-    function getCell(e) {
-      if (e.target.className.includes('textFitted')) {
-        return e.target.closest('.charValue')
-      } else {
-        return e.target
-      }
-    }
-
     charValue.onmouseup = (e) => {
       if (e.button !== 0) {
         return
       }
 
-      const cell = getCell(e)
+      const cell = getCell(e.target)
       if (!cell.classList.contains('curPlr')) { return }
 
       clearTimeout(pressTimer)
@@ -60,7 +60,7 @@ function addCharValueActs() {
     charValue.onmousedown = (e) => {
       if (e.button !== 0) { return }
 
-      const cell = getCell(e)
+      const cell = getCell(e.target)
       if (!cell.classList.contains('curPlr')) { return }
 
       cell.classList.add('clickable')
@@ -87,28 +87,24 @@ function addCM(selector, cardActionsDict) {
   })
 }
 
-function addTableInteractions() {
-  addCharValueActs()
-
+function addCharValueCM() {
   addCM('.charValue', {
-    'Обменять хар-ку с игроком': null,
-    'Изменить хар-ку': null
-  })
-
-  addCM('.charValue[class="charValue"]', {
     'Скопировать хар-ку': null,
     'Раскрыть хар-ку': null,
     'Вылечить': null,
-    'Изменить хар-ку \nдругого игрока': null,
+    'Изменить хар-ку \nдругого игрока': changeTrait,
   })
 
+  addCM('.charValue[class~="curPlr"]', {
+    'Обменять хар-ку с игроком': null,
+    'Изменить хар-ку': changeTrait
+  })
+}
+
+function addInitalTableInteractions() {
   addCM('.colHeader', {
     'Добавить игрока': addNewPlr,
     'Удалить игрока': deletePlr
-  })
-
-  addCM('.rowHeader', {
-    'Заменить всем хар-ку': null
   })
 }
 
@@ -127,6 +123,10 @@ function nextTurn() {
     const nextInd = (ind + 1) % (curTableWidth * TABLE_HEIGHT)
     charValueList[nextInd].classList.add('curPlr')
   })
+
+  addCharValueCM()
+
+  // addCM()
 }
 
 function beginGame() {
@@ -134,15 +134,10 @@ function beginGame() {
 
   const rows = userTable.querySelectorAll('.charTypes')
   for (const row of rows) {
-    const curCharName = row.querySelector('.rowHeaderCell').querySelector('.rowHeader').querySelector('.textFitted').innerHTML
-    const curCharDataList = dataDict[curCharName]
-
     for (const charValue of row.querySelectorAll('.charValue')) {
-      const curCharRecord = curCharDataList[rnd(0, curCharDataList.length-1)] // изменить при переходе на бекенд
-      charValue.innerHTML = curCharRecord
+      changeTrait(charValue, true)
     }
   }
-  textFitWithDefaultParams(userTable.querySelectorAll('.charValue'))
 
   // transfer input data to colHeader div and textfit it
 
@@ -162,8 +157,35 @@ function beginGame() {
   tableRowList.forEach(tableRow => {
     tableRow.children[1].children[0].classList.add('curPlr')
   })
+  
 
-  // remove cmItemFunc 'addNewPlr'
+  // change table interactions
+  addCharValueActs()
+  addCharValueCM()
   
   addCM('.colHeader', {})
+  addCM('.rowHeader', {
+    'Заменить всем хар-ку': null
+  })
+}
+
+/**
+ * 
+ * @param {HTMLElement} charValue 
+ */
+function changeTrait(charValue, isInitial = false) {
+  charValue = getCell(charValue)
+  const curCharName = charValue.closest('.charTypes').querySelector('.rowHeaderCell').querySelector('.rowHeader').querySelector('.textFitted').innerHTML
+  const curCharDataList = dataDict[curCharName]
+
+  if (charValue.children[0]) { charValue.children[0].remove() }
+  charValue.innerHTML = curCharDataList[rnd(0, curCharDataList.length-1)] // изменить при переходе на бекенд
+  textFitWithDefaultParams(charValue)
+
+  if (!isInitial) {
+    charValue.classList.add('changedTrait')
+    setTimeout(() => {
+      charValue.classList.remove('changedTrait')
+    }, 300)
+  }
 }

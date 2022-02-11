@@ -1,26 +1,4 @@
-/* .charValue::after {
-  content: "";
-  background: linear-gradient(to right, transparent, #ffffff);
-  height: 80px;
-  width: 0;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  transition: width .05s linear;
-}
-
-.charValue:active::after {
-  width: 100%;
-  НЕ ЗАБЫВАТЬ МЕНЯТЬ ТАЙМИНГ В СКРИПТЕ!!!
-  transition: width .3s linear; 
-}
-
-.shownValue:active::after {
-  width: 0;
-  transition: width 0s linear;
-} */
+/* Trait click animation */
 
 .charValue::after {
   content: "";
@@ -44,6 +22,7 @@
   cursor: default;
 }
 
+/* Context Menu */
 
 .contextMenu {
   position: absolute;
@@ -57,77 +36,24 @@
 
 .cmItem {
   padding: 5px 10px;
+  cursor: pointer;
 }
 
 .cmItem:hover {
   background-color: #ddaf26;
 }
 
-/* .curPlr  {
-  box-shadow: 0px 0px 8px 3px #b7b7b7;
-  z-index: 20;
-} */
-
-/* .plrCols[class~='curPlr'] {
-  box-shadow: 0px 0px 8px 3px #b7b7b7;
-  z-index: 20;
-  background-color: aqua;
-  border: #FFCB29 solid 5px;
-
-  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-} */
-
-/* .plrCols:nth-child(3) {
-  
-  background-color: aqua;
-  box-shadow: 5px 5px 8px 10px #b7b7b7;
-} */
-
-
-
-/* td[class~='curPlr'] {
-  box-shadow: 0px 0px 8px 3px #b7b7b7;
-  position: static;
-  position: absolute;
-  z-index: 1;
-}
-
-.charValue[class~='curPlr'] {
-  position: absolute;
-  z-index: 2;
-} */
+/* Current player trait interaction */
 
 .curPlr {
   cursor: pointer;
-  /* box-shadow: 
-    3px -3px 8px 3px #b7b7b7,
-    -3px 3px 8px 3px; */
   box-shadow : 
     2px 0px 0px 0px #ffcb29, 
     -2px 0px 0px 0px #ffcb29;
-  z-index: 1;
+  z-index: 1; /* нужно добавить аттрибут position. ИЛИ НЕ НУЖНО, ХЗ */
 }
 
 .curPlr:hover, .selectedRow {
   box-shadow: 0px 0px 8px 3px #b7b7b7;
-  /* position: relative; */
-  /* position: fixed; */
-  z-index: 10;
+  z-index: 10; /* нужно добавить аттрибут position. ИЛИ НЕ НУЖНО, ХЗ */
 }
-
-/* .curPlrCol:last-child {
-  box-shadow: 
-    2px 0px 0px 0px #ffcb29, 
-    -2px 0px 0px 0px #ffcb29, 
-    0px 2px 0px 0px #ffcb29;
-} */
-
-
-/* .plrCols[class~='curPlr'] {
-  z-index: 2;
-} */
-/* .plrCols > * {
-  background-color: red;
-} */

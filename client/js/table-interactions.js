@@ -1,4 +1,4 @@
-function showContextMenu(event, texts) {
+function showContextMenu(event, cardActionsDict) {
   const oldCM = document.querySelector('.contextMenu')
   if (oldCM) {
     oldCM.remove()
@@ -7,16 +7,17 @@ function showContextMenu(event, texts) {
   contextMenu.classList.add('contextMenu')
 
 
-  const cmItems = []
-  for (let i = 0; i < texts.length; i++) {
-    cmItems.push(document.createElement('div'))
-    cmItems[i].innerHTML = texts[i]
-    cmItems[i].classList.add('cmItem')
-  }      
-  contextMenu.append(...cmItems)
+  for (const [cardActionName, cardActionFunc] of Object.entries(cardActionsDict)) {
+    const newCMItem = document.createElement('div')
+    newCMItem.innerHTML = cardActionName
+    newCMItem.onclick = () => cardActionFunc(event)
+    newCMItem.classList.add('cmItem')
 
-  contextMenu.style.top  = event.y + contextMenu.offsetHeight > window.innerHeight ? window.innerHeight - contextMenu.offsetHeight : event.y + 'px'
-  contextMenu.style.left = event.x + contextMenu.offsetWidth > window.innerWidth ? window.innerWidth - contextMenu.offsetWidth : event.x     + 'px'
+    contextMenu.append(newCMItem)
+  }  
+
+  contextMenu.style.top  = event.y + 'px'
+  contextMenu.style.left = event.x + 'px'
   
   const body = document.querySelector('body')
   body.appendChild(contextMenu)
@@ -77,57 +78,38 @@ function addCharValueActs() {
   })
 }
 
-function addCharValueCM() {
-  const charValueList = document.querySelectorAll('.charValue')
-  charValueList.forEach(charValue => {
-    charValue.oncontextmenu = event => {
-      const cmItemTexts = charValue.classList.contains('curPlr') ? 
-        [
-          'Обменять хар-ку с игроком',
-          'Изменить хар-ку',
-        ] : [
-          'Скопировать хар-ку',
-          'Раскрыть хар-ку',
-          'Вылечить',
-          'Изменить хар-ку \nдругого игрока',
-        ]
-  
-      showContextMenu(event, cmItemTexts)
-    }
-  })
-}
-
-function addColHeadersCM() {
-  const colHeaderList = document.querySelectorAll('.colHeader')
-  colHeaderList.forEach(colHeader => {
-    colHeader.oncontextmenu = e => {
-      const colHeaderTexts = [
-        'Проголосовать'
-      ]
-
-      showContextMenu(e, colHeaderTexts)
-    }
-  })
-}
-
-function addRowHeadersCM() {
-  const rowHeaderList = document.querySelectorAll('.rowHeader')
-  rowHeaderList.forEach(rowHeader => {
-    rowHeader.oncontextmenu = e => {
-      const rowHeaderTexts = [
-        'Заменить всем хар-ку'
-      ]
-
-      showContextMenu(e, rowHeaderTexts)
+function addCM(selector, cardActionsDict) {
+  const elemList = document.querySelectorAll(selector)
+  elemList.forEach(elem => {
+    elem.oncontextmenu = event => {
+      showContextMenu(event, cardActionsDict)
     }
   })
 }
 
 function addTableInteractions() {
   addCharValueActs()
-  addCharValueCM()
-  addColHeadersCM()
-  addRowHeadersCM()
+
+  addCM('.charValue', {
+    'Обменять хар-ку с игроком': null,
+    'Изменить хар-ку': null
+  })
+
+  addCM('.charValue[class="charValue"]', {
+    'Скопировать хар-ку': null,
+    'Раскрыть хар-ку': null,
+    'Вылечить': null,
+    'Изменить хар-ку \nдругого игрока': null,
+  })
+
+  addCM('.colHeader', {
+    'Добавить игрока': addNewPlr,
+    'Удалить игрока': deletePlr
+  })
+
+  addCM('.rowHeader', {
+    'Заменить всем хар-ку': null
+  })
 }
 
 function nextTurn() {
@@ -142,7 +124,46 @@ function nextTurn() {
 
   curPlrTraitIndList.forEach(ind => {
     charValueList[ind].classList.remove('curPlr')
-    const nextInd = (ind + 1) % (tableWidth * tableHeight)
+    const nextInd = (ind + 1) % (curTableWidth * TABLE_HEIGHT)
     charValueList[nextInd].classList.add('curPlr')
   })
+}
+
+function beginGame() {
+  // fill data to charValue div
+
+  const rows = userTable.querySelectorAll('.charTypes')
+  for (const row of rows) {
+    const curCharName = row.querySelector('.rowHeaderCell').querySelector('.rowHeader').querySelector('.textFitted').innerHTML
+    const curCharDataList = dataDict[curCharName]
+
+    for (const charValue of row.querySelectorAll('.charValue')) {
+      const curCharRecord = curCharDataList[rnd(0, curCharDataList.length-1)] // изменить при переходе на бекенд
+      charValue.innerHTML = curCharRecord
+    }
+  }
+  textFitWithDefaultParams(userTable.querySelectorAll('.charValue'))
+
+  // transfer input data to colHeader div and textfit it
+
+  const plrNameList = userTable.querySelectorAll('.plrNameInput')
+  plrNameList.forEach(plrName => {
+    const playerName = plrName.value
+    const colHeader = plrName.closest('.colHeader')
+    colHeader.innerHTML = playerName
+    colHeader.style.display = 'block'
+    plrName.remove()
+  })
+  textFitWithDefaultParams(userTable.querySelectorAll('.colHeader'))
+
+  // add curPlr class
+
+  const tableRowList = document.querySelectorAll('.charTypes')
+  tableRowList.forEach(tableRow => {
+    tableRow.children[1].children[0].classList.add('curPlr')
+  })
+
+  // remove cmItemFunc 'addNewPlr'
+  
+  addCM('.colHeader', {})
 }

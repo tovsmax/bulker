@@ -36,6 +36,7 @@
 
 .cmItem {
   padding: 5px 10px;
+  cursor: pointer;
 }
 
 .cmItem:hover {

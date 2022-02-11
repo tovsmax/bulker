@@ -10,14 +10,14 @@ function showContextMenu(event, cardActionsDict) {
   for (const [cardActionName, cardActionFunc] of Object.entries(cardActionsDict)) {
     const newCMItem = document.createElement('div')
     newCMItem.innerHTML = cardActionName
-    newCMItem.onclick = cardActionFunc
+    newCMItem.onclick = () => cardActionFunc(event)
     newCMItem.classList.add('cmItem')
 
     contextMenu.append(newCMItem)
   }  
 
-  contextMenu.style.top  = event.y + contextMenu.offsetHeight > window.innerHeight ? window.innerHeight - contextMenu.offsetHeight : event.y + 'px'
-  contextMenu.style.left = event.x + contextMenu.offsetWidth > window.innerWidth ? window.innerWidth - contextMenu.offsetWidth : event.x     + 'px'
+  contextMenu.style.top  = event.y + 'px'
+  contextMenu.style.left = event.x + 'px'
   
   const body = document.querySelector('body')
   body.appendChild(contextMenu)
@@ -103,7 +103,8 @@ function addTableInteractions() {
   })
 
   addCM('.colHeader', {
-    'Добавить игрока': addNewPlr
+    'Добавить игрока': addNewPlr,
+    'Удалить игрока': deletePlr
   })
 
   addCM('.rowHeader', {
@@ -130,6 +131,7 @@ function nextTurn() {
 
 function beginGame() {
   // fill data to charValue div
+
   const rows = userTable.querySelectorAll('.charTypes')
   for (const row of rows) {
     const curCharName = row.querySelector('.rowHeaderCell').querySelector('.rowHeader').querySelector('.textFitted').innerHTML
@@ -151,20 +153,17 @@ function beginGame() {
     colHeader.innerHTML = playerName
     colHeader.style.display = 'block'
     plrName.remove()
-    // textFit(colHeaderDiv, {
-    //   alignHoriz: false,
-    //   alignVert: false,
-    //   multiLine: true,
-    // })
   })
   textFitWithDefaultParams(userTable.querySelectorAll('.colHeader'))
 
   // add curPlr class
+
   const tableRowList = document.querySelectorAll('.charTypes')
   tableRowList.forEach(tableRow => {
     tableRow.children[1].children[0].classList.add('curPlr')
   })
 
   // remove cmItemFunc 'addNewPlr'
+  
   addCM('.colHeader', {})
 }

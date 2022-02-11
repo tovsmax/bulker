@@ -74,14 +74,27 @@ function addNewPlr() {
       </div>
     </th>`
   
-  // const lastTableHeader = userTable.querySelector('.colHeaders>th:last-child>.colHeader')
-  // textFitWithDefaultParams(lastTableHeader)
-
-  const tableRows = document.querySelectorAll('tr')
+  const tableRows = userTable.querySelectorAll('tr')
   for (let rowInd = 1; rowInd <= TABLE_HEIGHT; rowInd++) {
-    tableRows[rowInd].innerHTML += `<td class="charValueCell"><div class="charValue"></div></td>`
+    tableRows[rowInd].innerHTML += `
+      <td class="charValueCell">
+        <div class="charValue"></div>
+      </td>`
   }
 
   addTableInteractions()
   curTableWidth++
+}
+
+/**
+ * 
+ * @param {Event} event 
+ */
+function deletePlr(event) {
+  const tableRows = userTable.rows
+  const delColInd = event.target.closest('th').cellIndex
+
+  for (const row of tableRows) {
+    row.children[delColInd].remove()
+  }
 }

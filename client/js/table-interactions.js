@@ -1,11 +1,15 @@
-function showContextMenu(event, cardActionsDict) {
+function removeContextMenu() {
   const oldCM = document.querySelector('.contextMenu')
   if (oldCM) {
     oldCM.remove()
   }
+}
+
+function createContextMenu(event, cardActionsDict) {
+  removeContextMenu()
+  
   const contextMenu = document.createElement('div')
   contextMenu.classList.add('contextMenu')
-
 
   for (const [cardActionName, cardActionFunc] of Object.entries(cardActionsDict)) {
     const newCMItem = document.createElement('div')
@@ -58,6 +62,7 @@ function addCharValueActs() {
     }
 
     charValue.onmousedown = (e) => {
+      removeContextMenu()
       if (e.button !== 0) { return }
 
       const cell = getCell(e.target)
@@ -82,7 +87,7 @@ function addCM(selector, cardActionsDict) {
   const elemList = document.querySelectorAll(selector)
   elemList.forEach(elem => {
     elem.oncontextmenu = event => {
-      showContextMenu(event, cardActionsDict)
+      createContextMenu(event, cardActionsDict)
     }
   })
 }

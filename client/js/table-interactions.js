@@ -27,9 +27,9 @@ function createContextMenu(event, cardActionsDict) {
   body.appendChild(contextMenu)
 
   event.preventDefault()
-  window.onmousedown = () => {
+  window.onclick = () => {
     contextMenu.remove()
-    window.onmousedown = null
+    window.onclick = null
   }
 }
 

@@ -23,16 +23,16 @@ function showContextMenu(event, cardActionsDict) {
   body.appendChild(contextMenu)
 
   event.preventDefault()
-  window.onclick = () => {
+  window.onmousedown = () => {
     contextMenu.remove()
-    window.onclick = null
+    window.onmousedown = null
   }
 }
 
 /**
  * 
- * @param {HTMLElement} target 
- * @returns {HTMLElement} target
+ * @param {HTMLElement} target - the charValue or textFitted HTMLElement
+ * @returns {HTMLElement} the charValue HTMLElement
  */
 function getCell(target) {
   if (target.className.includes('textFitted')) {
@@ -125,8 +125,6 @@ function nextTurn() {
   })
 
   addCharValueCM()
-
-  // addCM()
 }
 
 function beginGame() {
@@ -165,13 +163,14 @@ function beginGame() {
   
   addCM('.colHeader', {})
   addCM('.rowHeader', {
-    'Заменить всем хар-ку': null
+    'Заменить всем хар-ку': changeRow
   })
 }
 
 /**
  * 
- * @param {HTMLElement} charValue 
+ * @param {HTMLElement} charValue - the charValue or textFitted HTMLElement
+ * @param {boolean} isInitial - is this function called in the initial stage of the game
  */
 function changeTrait(charValue, isInitial = false) {
   charValue = getCell(charValue)
@@ -187,5 +186,17 @@ function changeTrait(charValue, isInitial = false) {
     setTimeout(() => {
       charValue.classList.remove('changedTrait')
     }, 300)
+  }
+}
+
+/**
+ * 
+ * @param {HTMLElement} rowHeader 
+ */
+function changeRow(rowHeader) {
+  const tableRow = rowHeader.closest('.charTypes')
+
+  for (const charValue of tableRow) {
+    changeTrait(charValue)
   }
 }

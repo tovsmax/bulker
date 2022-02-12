@@ -8,7 +8,7 @@ createTable()
 
 // Begin game
 
-// beginGame()
+beginGame()
 
 // fillData()
 

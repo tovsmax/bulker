@@ -199,9 +199,9 @@ function changeTrait(charValue, isInitial = false) {
  * @param {HTMLElement} rowHeader 
  */
 function changeRow(rowHeader) {
-  const tableRow = rowHeader.closest('.charTypes')
+  const charValueList = rowHeader.closest('.charTypes').querySelectorAll('.charValue')
 
-  for (const charValue of tableRow) {
+  for (const charValue of charValueList) {
     changeTrait(charValue)
   }
 }

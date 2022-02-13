@@ -82,17 +82,17 @@ function addNewPlr() {
       </td>`
   }
 
-  addTableInteractions()
+  addInitalTableInteractions()
   curTableWidth++
 }
 
 /**
  * 
- * @param {Event} event 
+ * @param {HTMLElement} charValue 
  */
-function deletePlr(event) {
+function deletePlr(charValue) {
   const tableRows = userTable.rows
-  const delColInd = event.target.closest('th').cellIndex
+  const delColInd = charValue.closest('th').cellIndex
 
   for (const row of tableRows) {
     row.children[delColInd].remove()

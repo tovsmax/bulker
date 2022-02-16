@@ -1,3 +1,25 @@
+/* Trait interactions */
+
+.changedTrait {
+  box-shadow: 0px 0px 8px 3px #ffcb29;
+  position: relative;
+  z-index: 10;
+}
+
+.shownValue {
+  background-color: #ffffff;
+  cursor: default;
+}
+
+.dead {
+  cursor: default;
+  background-color: #bfbfbf;
+}
+
+.dead:hover {
+  box-shadow: 0px 0px 0px 0px transparent;
+}
+
 /* Trait click animation */
 
 .charValue::after {
@@ -17,10 +39,17 @@
   transition: width .3s linear; 
 }
 
-.shownValue {
+
+/* Для игроков */
+/* .shownValue[class~='owned']::after {
   background-color: #ffffff;
-  cursor: default;
+  background: linear-gradient(to right, transparent, #b7b7b7);
 }
+.shownValue[class~='owned']:active::after {
+  width: 100%;
+  transition: width .3s linear;
+} */
+
 
 /* Context Menu */
 
@@ -58,10 +87,4 @@
     0px 2px 0px 0px #ffcb29, 
     0px -2px 0px 0px #ffcb29;
   z-index: 1;
-}
-
-.changedTrait {
-  box-shadow: 0px 0px 8px 3px #ffcb29;
-  position: relative;
-  z-index: 10;
 }

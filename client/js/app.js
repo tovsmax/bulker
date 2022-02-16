@@ -1,17 +1,5 @@
-// Initial stage
-
-document.querySelector('.moderTools').hidden = true
+// document.querySelector('.moderTools').hidden = false
 
 createTable()
 
-// addInitalTableInteractions()
-
-// Begin game
-
-beginGame()
-
-// fillData()
-
-
-// nextTurn()
-// nextTurn()
+// beginGame()

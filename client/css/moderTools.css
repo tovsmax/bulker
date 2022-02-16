@@ -1,8 +1,105 @@
+/* Undertable elements */
+
+.sec2 {
+  font-size: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 40px;
+}
+
+/* Moderator tools */
+
+.moderTools {
+  font-size: inherit;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+}
+
+.moderTools>* {
+  font-size: inherit;
+  margin: 0 5px;
+}
+
+/* Timer panel */
+
+.timerPanel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.timerPanel>* {
+  margin: 5px;
+}
+
+/* Timer counter */
+
+.timeCounter {
+  /* font-family: 'Share Tech Mono', monospace; */
+  font-family: 'Fira Code', monospace;
+  font-size: 60px;
+}
+
+.decrease {
+  color: yellow;
+}
+
+.alarm {
+  color: red;
+}
+
+.increase {
+  color: greenyellow;
+}
+
+.freeze {
+  color: #084ac3;
+}
+
+/* Timer control */
+
 label {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+label>* {
+  /* width: 100%; */
+  font-size: inherit;
+  margin: 2px;
 }
 
 .counterInput {
   width: 50px;
+  font-size: inherit;
   text-align: center;
+}
+
+.autoTimerLabel {
+  width: max-content;
+}
+
+.autoTimerCheckbox {
+  width: 20px;
+  height: 20px;
+}
+
+/* Other buttons */
+
+.otherBtns {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: flex-start;
+}
+
+.otherBtns>* {
+  font-size: inherit;
+  width: max-content;
+  margin: 2px;
 }

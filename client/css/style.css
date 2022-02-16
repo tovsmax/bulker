@@ -1,15 +1,12 @@
-html {
-  box-sizing: border-box;
-}
+/* Global elems */
+
 *, *::after, *::before {
   box-sizing: border-box;
 }
 
-span {
-  padding: 0;
-}
-
 body {
+  font-size: 20px;
+  
   margin: 0;
   height: 100vh;
   min-width: 500px;
@@ -17,14 +14,16 @@ body {
   background: url(../image/bgs/yellow-wo-stripes.jpg) center no-repeat;
   background-size: cover;
 
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: row; */
 
 
   font-family: 'Open Sans', sans-serif;
 }
+
+/* Strapes */
 
 body::before, body::after {
   content: "";
@@ -44,25 +43,14 @@ body::before{
   top: 0;
 }
 
+
+
 .wrapper {
   min-width: 1000px;
   min-height: 500px;
 }
 
-.panel {
-  background: #FFCB29;
-  border: black 2px solid;
-  border-radius: 10px;
-
-  margin: 10px auto;
-  padding: 10px;
-  width: fit-content;
-}
-
-.retrievedMsg {
-  display: list-item;
-  margin: 5px 0;
-}
+/* Standard button */
 
 .btn {
   background-color: #A9ED26;
@@ -78,6 +66,59 @@ body::before{
   background-color: #C1F65B;
 }
 .btn:disabled {
-  background-color: #ffd864;
+  background-color: #bdbe4f;
+  /* background-color: #99af6f; */
   color: gray;
+}
+
+
+
+.panel {
+  width: 100%;
+
+  background: #FFCB29;
+  border: black 2px solid;
+  border-radius: 10px;
+
+  padding: 10px;
+}
+
+
+.sec1 {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  position: absolute;
+  top: 40px;
+}
+
+.globalTraits {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  margin: 0 0 0 20px;
+  max-width: 250px;
+  min-width: 250px;
+}
+
+p {
+  font-size: 16px;
+}
+
+strong {
+  font-weight: bold;
+}
+
+li {
+  font-size: 16px;
+  list-style-type: disc;
+  /* padding: 0 0 0 5px; */
+}
+
+ul {
+  padding-left: 20px;
 }

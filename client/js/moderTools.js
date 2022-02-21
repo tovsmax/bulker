@@ -1,9 +1,10 @@
+// Timer panel
+
+// Timer
+
 const timeCounter = document.querySelector('.timeCounter')
 const timerBtn = document.querySelector('.timerBtn')
 const timeTimerInput = document.querySelector('.timeTimer')
-
-const freezeBtn = document.querySelector('.freezeBtn')
-const timeFreezeInput = document.querySelector('.timeFreeze')
 
 const TWHit = new Audio('audio/typewriter-hit.mp3')
 TWHit.volume = 0.5
@@ -39,6 +40,7 @@ function changeTimer() {
     (sec > 9 ? sec : ('0' + sec))
 }
 
+let timerInterval
 function startTimer() {
   timeCounter.classList.add('decrease')
   const timeTimerValue = timeTimerInput.value
@@ -68,6 +70,11 @@ function endTimer() {
 timerBtn.onclick = () => {
   startTimer()
 }
+
+// Freeze
+
+const freezeBtn = document.querySelector('.freezeBtn')
+const timeFreezeInput = document.querySelector('.timeFreeze')
 
 function changeFreeze() {
   const curTimeStr = timeCounter.innerHTML
@@ -115,4 +122,36 @@ function unfreeze() {
 
 freezeBtn.onclick = () => {
   freeze()
+}
+
+// Main button actions and timer activation on next turn
+
+const mainBtn = document.querySelector('.mainBtn')
+const autoTimerCheckbox = document.querySelector('.autoTimerCheckbox')
+
+function changeMainBtn() {
+  mainBtn.innerHTML = 'Следующий ход'
+  mainBtn.onclick = () => {
+    nextTurn()
+
+    if (timerInterval) { endTimer() }
+    if (autoTimerCheckbox.checked) {
+      startTimer()
+    }
+  }
+}
+
+mainBtn.onclick = () => {
+  changeMainBtn()
+  fillData()
+  addGeneralTableInteractions()
+}
+
+mainBtn.click()
+
+// Export
+import { exportGame } from "./export.js";
+const exportBtn = document.querySelector('.exportBtn')
+exportBtn.onclick = () => {
+  exportGame()
 }

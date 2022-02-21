@@ -95,7 +95,7 @@ body::before{
   top: 40px;
 }
 
-.globalTraits {
+.globalTraitsPanel {
   display: flex;
   flex-direction: column;
   justify-content: space-around;

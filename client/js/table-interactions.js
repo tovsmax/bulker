@@ -46,7 +46,21 @@ function getCell(target) {
   }
 }
 
-function addCharValueActs() {
+function showTraitFunc(cell) {
+  if (!cell.classList.contains('curPlr')) { return }
+
+  cell.classList.add('clickable')
+  pressTimer = setTimeout(() => {
+    cell.classList.remove('clickable')
+    cell.classList.add('shownValue') // возможно, это можно удалить
+    cell.onmousedown = null
+    cell.onmouseup = null
+
+    nextTurn() // переход на следующий ход
+  }, 300); // НЕ ЗАБЫВАТЬ МЕНЯТЬ ТАЙМНИ В СТИЛЯХ!!!
+}
+
+function addShowTraitAct() {
   const charValueList = document.querySelectorAll('.charValue')
   charValueList.forEach(charValue => {
     charValue.onmouseup = (e) => {
@@ -66,21 +80,22 @@ function addCharValueActs() {
       if (e.button !== 0) { return }
 
       const cell = getCell(e.target)
-      if (!cell.classList.contains('curPlr')) { return }
-
-      cell.classList.add('clickable')
-      pressTimer = setTimeout(() => {
-        cell.classList.remove('clickable')
-        cell.classList.add('shownValue') // возможно, это можно удалить
-        cell.onmousedown = null
-        cell.onmouseup = null
-
-        nextTurn() // переход на следующий ход
-      }, 300); // НЕ ЗАБЫВАТЬ МЕНЯТЬ ТАЙМНИ В СТИЛЯХ!!!
+      
+      showTraitFunc(cell)
     }
-
-    
   })
+}
+
+function votingFunc() {
+
+}
+
+function addVotingAct() {
+
+}
+
+function addRevotingAct() {
+
 }
 
 function addCM(selector, cardActionsDict) {
@@ -132,8 +147,8 @@ function nextTurn() {
   addCharValueCM()
 }
 
-function beginGame() {
-  // fill data to charValue div
+function fillData() {
+  // fill data to charValue div 
 
   const rows = userTable.querySelectorAll('.charTypes')
   for (const row of rows) {
@@ -142,28 +157,34 @@ function beginGame() {
     }
   }
 
-  // transfer input data to colHeader div and textfit it
+  // transfer input data to colHeader div and textfit it, also give players action cards
 
-  const plrNameList = userTable.querySelectorAll('.plrNameInput')
-  plrNameList.forEach(plrName => {
-    const playerName = plrName.value
-    const colHeader = plrName.closest('.colHeader')
+  const plrNameInputList = userTable.querySelectorAll('.plrNameInput')
+  plrNameInputList.forEach(playerNameInput => {
+    const playerName = playerNameInput.value
+    const colHeader = playerNameInput.closest('.colHeader')
+
     colHeader.innerHTML = playerName
     colHeader.style.display = 'block'
-    plrName.remove()
+    
+    plrsActCards[playerName] = []
+    const actCardInd1 = rnd(0, actions.length-1)
+    plrsActCards[playerName].push(actions.splice(actCardInd1, 1)[0])
+    const actCardInd2 = rnd(0, actions.length-1)
+    plrsActCards[playerName].push(actions.splice(actCardInd2, 1)[0])
+    
+    playerNameInput.remove()
   })
   textFitWithDefaultParams(userTable.querySelectorAll('.colHeader'))
+}
 
-  // add curPlr class
-
+function addGeneralTableInteractions() {
   const tableRowList = document.querySelectorAll('.charTypes')
   tableRowList.forEach(tableRow => {
     tableRow.children[1].children[0].classList.add('curPlr')
   })
-  
 
-  // change table interactions
-  addCharValueActs()
+  addShowTraitAct()
   addCharValueCM()
   
   addCM('.colHeader', {})
@@ -183,7 +204,7 @@ function changeTrait(charValue, isInitial = false) {
   const curCharDataList = dataDict[curCharName]
 
   if (charValue.children[0]) { charValue.children[0].remove() }
-  charValue.innerHTML = curCharDataList[rnd(0, curCharDataList.length-1)] // изменить при переходе на бекенд
+  charValue.innerHTML = curCharDataList.splice(rnd(0, curCharDataList.length-1))[0] // изменить при переходе на бекенд
   textFitWithDefaultParams(charValue)
 
   if (!isInitial) {

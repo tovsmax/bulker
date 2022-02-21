@@ -1,5 +1,11 @@
-// let tableInputs = document.querySelectorAll('.tableInput')
-// tableInputs = (tableInputs.length) ? tableInputs : [{value: 6}, {value: 8}]
+let plrsActCards = {}
+
+let curGameStageInd = 0
+// 0: Инициализация
+// 1: Расскрытие хар-ик
+// 2: Голосование
+// 3: Оправдание и Переголосование
+// 4: Конец игры
 
 const userTable = document.getElementById('userTable')
 
@@ -98,3 +104,4 @@ function deletePlr(charValue) {
     row.children[delColInd].remove()
   }
 }
+

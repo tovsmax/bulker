@@ -46,8 +46,15 @@ function getCell(target) {
   }
 }
 
+function showAllTraits() {
+  const charValueList = document.querySelectorAll('.charValue')
+  charValueList.forEach(charValue => {
+    showTraitFunc(charValue)
+  })
+}
+
 function showTraitFunc(cell) {
-  if (!cell.classList.contains('curPlr')) { return }
+  // if (!cell.classList.contains('curPlr')) { return } // НЕ ЗАБЫТЬ РАСКОМЕНТИТЬ!!!!!
 
   cell.classList.add('clickable')
   pressTimer = setTimeout(() => {
@@ -56,7 +63,7 @@ function showTraitFunc(cell) {
     cell.onmousedown = null
     cell.onmouseup = null
 
-    nextTurn() // переход на следующий ход
+    // nextTurn() // переход на следующий ход // НЕ ЗАБЫТЬ РАСКОМЕНТИТЬ!!!!!
   }, 300); // НЕ ЗАБЫВАТЬ МЕНЯТЬ ТАЙМНИ В СТИЛЯХ!!!
 }
 
@@ -193,6 +200,11 @@ function addGeneralTableInteractions() {
   })
 }
 
+function UserException() {
+  this.message = 'Trait Value is undefiend 3'
+  this.name = 'Trait Value is undefiend 2'
+}
+
 /**
  * 
  * @param {HTMLElement} charValue - the charValue or textFitted HTMLElement
@@ -204,7 +216,23 @@ function changeTrait(charValue, isInitial = false) {
   const curCharDataList = dataDict[curCharName]
 
   if (charValue.children[0]) { charValue.children[0].remove() }
-  charValue.innerHTML = curCharDataList.splice(rnd(0, curCharDataList.length-1))[0] // изменить при переходе на бекенд
+  const oldCharDataList = [...curCharDataList]
+  console.log('oldCharDataList: ', oldCharDataList);
+  const rndInd = rnd(0, curCharDataList.length-1)
+  console.log('rndInd: ', rndInd);
+  let newTrait = curCharDataList.splice(rndInd, 1)[0]
+  console.log('curCharDataList: ', curCharDataList);
+  console.log('');
+
+  // try {
+  //   newTrait 
+  //   if (newTrait === undefined) {
+  //     throw new UserException('Trait Value is undefiend 1')
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
+  charValue.innerHTML = newTrait // изменить при переходе на бекенд
   textFitWithDefaultParams(charValue)
 
   if (!isInitial) {

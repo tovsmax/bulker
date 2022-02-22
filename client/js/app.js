@@ -2,7 +2,6 @@
 
 createTable()
 
-
-
+showAllTraits()
 
 // exportPLayers()

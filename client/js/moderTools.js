@@ -42,13 +42,18 @@ function changeTimer() {
 
 let timerInterval
 function startTimer() {
+  freezeBtn.disabled = false
+  clearInterval(timerInterval)
+  clearInterval(freezeInterval)
+  freezeBtn.innerHTML = 'Заморозить'
+  freezeBtn.onclick = freeze
+
   timeCounter.classList.add('decrease')
   const timeTimerValue = timeTimerInput.value
   timeCounter.innerHTML = timeTimerValue > 9
     ? (timeTimerValue+':00')
     : ('0' + timeTimerValue+':00')
 
-  if (timerInterval) { clearInterval(timerInterval) }
   timerInterval = setInterval(changeTimer, 1000)
 
   timerBtn.innerHTML = 'Сброс'
@@ -58,7 +63,9 @@ function startTimer() {
 }
 
 function endTimer() {
+  freezeBtn.disabled = true
   clearInterval(timerInterval)
+  clearInterval(freezeInterval)
   timeCounter.className = 'timeCounter'
   timeCounter.innerHTML = '00:00'
 
@@ -110,6 +117,7 @@ function freeze() {
     : ('0' + timeFreezeValue+':00')
 
   clearInterval(timerInterval)
+  clearInterval(freezeInterval)
   freezeInterval = setInterval(changeFreeze, 1000)
 
   freezeBtn.innerHTML = 'Разморозить'
@@ -120,6 +128,7 @@ function unfreeze() {
   timeCounter.classList.remove('freeze')
   timeCounter.innerHTML = timerTime
 
+  clearInterval(timerInterval)
   clearInterval(freezeInterval)
   timerInterval = setInterval(changeTimer, 1000)
 

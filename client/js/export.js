@@ -39,7 +39,7 @@ function createPLayersExportFile() {
   colHeaderSpanList.forEach((colHeaderSpan, chtInd) => {
     // export traits
     const plrName = colHeaderSpan.innerHTML
-    let playerData = ''
+    let playerData = 'Игрок: ' + plrName + '\n'
     rowList.forEach(row => {
       const traitName = row.children[0].children[0].children[0].innerHTML
       const traitValue = row.children[chtInd+1].children[0].children[0].innerHTML

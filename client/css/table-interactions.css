@@ -74,7 +74,7 @@
 
 /* Current player trait interaction */
 
-.curPlr {
+.curPlr:not([class~='colHeader']) {
   cursor: pointer;
   box-shadow : 
     2px 0px 0px 0px #ffcb29, 
@@ -87,4 +87,24 @@
     0px 2px 0px 0px #ffcb29, 
     0px -2px 0px 0px #ffcb29;
   z-index: 1;
+}
+
+/* Voting */
+
+.votes {
+  /* display: ; */
+  position: absolute;
+}
+
+.colHeader:not([class~='curPlr']):after {
+  content: ' ';
+  display: block;
+
+  background-color: #ffcb29;
+  width: 5px;
+  height: 50%;
+
+  position: absolute;
+  top: 20px;
+  left: 8px;
 }

@@ -54,7 +54,7 @@ function showAllTraits() {
 }
 
 function showTraitFunc(cell) {
-  // if (!cell.classList.contains('curPlr')) { return } // НЕ ЗАБЫТЬ РАСКОМЕНТИТЬ!!!!!
+  if (!cell.classList.contains('curPlr') && !cell.classList.contains('colHeader')) { return }
 
   cell.classList.add('clickable')
   pressTimer = setTimeout(() => {
@@ -98,7 +98,13 @@ function votingFunc() {
 }
 
 function addVotingAct() {
+  const colHeaderList = document.querySelectorAll('.colHeader')
+  colHeaderList.forEach(colHeader => {
+    const votes = document.createElement('div')
+    votes.className = 'votes'
 
+
+  })
 }
 
 function addRevotingAct() {
@@ -136,6 +142,15 @@ function addInitalTableInteractions() {
 }
 
 function nextTurn() {
+  const colHeaderList = document.querySelectorAll('.colHeader')
+  colHeaderList.forEach((colHeader, chInd, chl) => {
+    if (colHeader.classList.contains('curPlr')) {
+      colHeader.classList.remove('curPlr')
+      const nextInd = (chInd+1) % curTableWidth
+      chl[nextInd].classList.add('curPlr')
+    }
+  })
+
   const charValueList = document.querySelectorAll('.charValue')
   const curPlrTraitIndList = []
 
@@ -183,10 +198,18 @@ function fillData() {
     playerNameInput.remove()
   })
   textFitWithDefaultParams(userTable.querySelectorAll('.colHeader'))
+    
+  document.querySelectorAll('.colHeader').forEach(ch => {
+    const votes = document.createElement('div')
+    votes.className = 'votes'
+    votes.innerHTML = '+'.repeat(rnd(0, 3))
+    ch.appendChild(votes)
+  })
+  
 }
 
 function addGeneralTableInteractions() {
-  const tableRowList = document.querySelectorAll('.charTypes')
+  const tableRowList = document.querySelectorAll('.charTypes, .colHeaders')
   tableRowList.forEach(tableRow => {
     tableRow.children[1].children[0].classList.add('curPlr')
   })

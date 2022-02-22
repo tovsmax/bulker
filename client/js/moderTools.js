@@ -48,6 +48,7 @@ function startTimer() {
     ? (timeTimerValue+':00')
     : ('0' + timeTimerValue+':00')
 
+  if (timerInterval) { clearInterval(timerInterval) }
   timerInterval = setInterval(changeTimer, 1000)
 
   timerBtn.innerHTML = 'Сброс'
@@ -112,6 +113,7 @@ function freeze() {
   freezeInterval = setInterval(changeFreeze, 1000)
 
   freezeBtn.innerHTML = 'Разморозить'
+  freezeBtn.onclick = unfreeze
 }
 
 function unfreeze() {
@@ -122,11 +124,10 @@ function unfreeze() {
   timerInterval = setInterval(changeTimer, 1000)
 
   freezeBtn.innerHTML = 'Заморозить'
+  freezeBtn.onclick = freeze
 }
 
-freezeBtn.onclick = () => {
-  freeze()
-}
+freezeBtn.onclick = freeze
 
 // Main button actions and timer activation on next turn
 

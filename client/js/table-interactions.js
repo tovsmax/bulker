@@ -216,22 +216,8 @@ function changeTrait(charValue, isInitial = false) {
   const curCharDataList = dataDict[curCharName]
 
   if (charValue.children[0]) { charValue.children[0].remove() }
-  const oldCharDataList = [...curCharDataList]
-  console.log('oldCharDataList: ', oldCharDataList);
   const rndInd = rnd(0, curCharDataList.length-1)
-  console.log('rndInd: ', rndInd);
   let newTrait = curCharDataList.splice(rndInd, 1)[0]
-  console.log('curCharDataList: ', curCharDataList);
-  console.log('');
-
-  // try {
-  //   newTrait 
-  //   if (newTrait === undefined) {
-  //     throw new UserException('Trait Value is undefiend 1')
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
   charValue.innerHTML = newTrait // изменить при переходе на бекенд
   textFitWithDefaultParams(charValue)
 

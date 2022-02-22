@@ -76,6 +76,8 @@ timerBtn.onclick = () => {
 const freezeBtn = document.querySelector('.freezeBtn')
 const timeFreezeInput = document.querySelector('.timeFreeze')
 
+
+let freezeInterval 
 function changeFreeze() {
   const curTimeStr = timeCounter.innerHTML
   const curTime = 
@@ -96,6 +98,8 @@ function changeFreeze() {
     (sec > 9 ? sec : ('0' + sec))
 }
 
+
+let timerTime
 function freeze() {
   timeCounter.classList.add('freeze')
   timerTime = timeCounter.innerHTML
@@ -105,7 +109,7 @@ function freeze() {
     : ('0' + timeFreezeValue+':00')
 
   clearInterval(timerInterval)
-  freezeInterval = setInterval(changeFreeze, 100)
+  freezeInterval = setInterval(changeFreeze, 1000)
 
   freezeBtn.innerHTML = 'Разморозить'
 }

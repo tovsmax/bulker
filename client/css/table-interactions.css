@@ -96,7 +96,11 @@
   position: absolute;
 }
 
-.colHeader:not([class~='curPlr']):after {
+.otherPlr {
+  cursor: pointer;
+}
+
+.otherPlr:after {
   content: ' ';
   display: block;
 

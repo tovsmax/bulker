@@ -1,4 +1,4 @@
-function removeContextMenu() {
+function closeContextMenu() {
   const oldCM = document.querySelector('.contextMenu')
   if (oldCM) {
     oldCM.remove()
@@ -6,8 +6,8 @@ function removeContextMenu() {
 }
 
 function createContextMenu(event, cardActionsDict) {
-  removeContextMenu()
-  
+  closeContextMenu()
+
   const contextMenu = document.createElement('div')
   contextMenu.classList.add('contextMenu')
 
@@ -83,7 +83,7 @@ function addShowTraitAct() {
     }
 
     charValue.onmousedown = (e) => {
-      removeContextMenu()
+      closeContextMenu()
       if (e.button !== 0) { return }
 
       const cell = getCell(e.target)
@@ -91,24 +91,6 @@ function addShowTraitAct() {
       showTraitFunc(cell)
     }
   })
-}
-
-function votingFunc() {
-
-}
-
-function addVotingAct() {
-  const colHeaderList = document.querySelectorAll('.colHeader')
-  colHeaderList.forEach(colHeader => {
-    const votes = document.createElement('div')
-    votes.className = 'votes'
-
-
-  })
-}
-
-function addRevotingAct() {
-
 }
 
 function addCM(selector, cardActionsDict) {
@@ -142,29 +124,25 @@ function addInitalTableInteractions() {
 }
 
 function nextTurn() {
-  const colHeaderList = document.querySelectorAll('.colHeader')
-  colHeaderList.forEach((colHeader, chInd, chl) => {
-    if (colHeader.classList.contains('curPlr')) {
-      colHeader.classList.remove('curPlr')
-      const nextInd = (chInd+1) % curTableWidth
-      chl[nextInd].classList.add('curPlr')
-    }
-  })
-
   const charValueList = document.querySelectorAll('.charValue')
   const curPlrTraitIndList = []
 
   for (let ind = 0; ind < charValueList.length; ind++) {
     if (charValueList[ind].classList.contains('curPlr')) {
+      if (ind === curTableWidth-1) { startVoting(); return} // из-за этого могут быть проблемы
       curPlrTraitIndList.push(ind)
     }
   }
 
+  let skipPlr = false
   curPlrTraitIndList.forEach(ind => {
     charValueList[ind].classList.remove('curPlr')
     const nextInd = (ind + 1) % (curTableWidth * TABLE_HEIGHT)
+    if (charValueList[nextInd].classList.contains('dead')) { skipPlr = true }
     charValueList[nextInd].classList.add('curPlr')
   })
+
+  if (skipPlr) { nextTurn() }
 
   addCharValueCM()
 }
@@ -202,14 +180,13 @@ function fillData() {
   document.querySelectorAll('.colHeader').forEach(ch => {
     const votes = document.createElement('div')
     votes.className = 'votes'
-    votes.innerHTML = '+'.repeat(rnd(0, 3))
     ch.appendChild(votes)
   })
   
 }
 
 function addGeneralTableInteractions() {
-  const tableRowList = document.querySelectorAll('.charTypes, .colHeaders')
+  const tableRowList = document.querySelectorAll('.charTypes')
   tableRowList.forEach(tableRow => {
     tableRow.children[1].children[0].classList.add('curPlr')
   })
@@ -217,7 +194,10 @@ function addGeneralTableInteractions() {
   addShowTraitAct()
   addCharValueCM()
   
-  addCM('.colHeader', {})
+  addCM('.colHeader', {
+    'Убить игрока': killPlayer,
+    'Воскресить игрока': revivePlayer,
+  })
   addCM('.rowHeader', {
     'Заменить всем хар-ку': changeRow
   })
@@ -262,4 +242,20 @@ function changeRow(rowHeader) {
   for (const charValue of charValueList) {
     changeTrait(charValue)
   }
+}
+
+function killPlayer(playerColHeader) {
+  const deathInd = playerColHeader.closest('th').cellIndex
+  const charTypes = document.querySelectorAll('.charTypes')
+  charTypes.forEach(charTypeRow => {
+    charTypeRow.children[deathInd].children[0].classList.add('dead')
+  })
+}
+
+function revivePlayer(playerColHeader) {
+  const reviveInd = playerColHeader.closest('th').cellIndex
+  const charTypes = document.querySelectorAll('.charTypes')
+  charTypes.forEach(charTypeRow => {
+    charTypeRow.children[reviveInd].children[0].classList.remove('dead')
+  })
 }

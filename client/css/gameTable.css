@@ -35,7 +35,7 @@ th {
 }
 
 /* здесь вставлен not() с несуществующим селектором класса .lol, чтобы селектор был выше в приоритете чем селектор .curPlr:not([class~='colHeader']) */
-.charValue:not(.lol):hover {
+.charValue:not(.dead):hover {
   box-shadow: 0px 0px 8px 3px #b7b7b7;
   position: relative;
   z-index: 10;

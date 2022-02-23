@@ -161,11 +161,92 @@ mainBtn.onclick = () => {
   addGeneralTableInteractions()
 }
 
-mainBtn.click()
-
 // Export
 // import { exportGame } from "./export.js";
 const exportBtn = document.querySelector('.exportBtn')
 exportBtn.onclick = () => {
   exportGame()
 }
+
+function startVoting() {
+  votingBtn.onclick = endVoting
+  votingBtn.innerHTML = 'Отменить голосование'
+  
+  const charValueList = document.querySelectorAll('.charValue')
+  charValueList.forEach(charValue => {
+    charValue.classList.remove('curPlr')
+  })
+
+  const colHeaderList = document.querySelectorAll('.colHeader')
+  colHeaderList.forEach(colHeader => {
+    colHeader.classList.add('otherPlr')
+
+    colHeader.onmouseup = (e) => {
+      if (e.button === 0) {
+        colHeader.querySelector('.votes').innerHTML += '+'
+      } else if (e.button === 2) {
+        const votesCount = colHeader.querySelector('.votes').innerHTML
+        colHeader.querySelector('.votes').innerHTML = votesCount.replace('+', '')
+      }
+    }
+  })
+
+  const mainBtn = document.querySelector('.mainBtn')
+  mainBtn.innerHTML = 'Закончить голосование'
+  mainBtn.onclick = () => {
+    let maxVotes = 0
+    let maxVotesCHList = []
+    colHeaderList.forEach(colHeader => {
+      const curVotesCount = colHeader.querySelector('.votes').innerHTML.length
+      if (curVotesCount === maxVotes && maxVotes !== 0) {
+        maxVotesCHList.push(colHeader)
+      } else if (curVotesCount >= maxVotes) {
+        maxVotes = curVotesCount
+        maxVotesCHList = [colHeader]
+      }
+    })
+
+    if (maxVotes === 0) {
+      alert('Необходимо дать хоть один голос')
+    } else if (maxVotesCHList.length === 1) {
+      const tableRowList = document.querySelectorAll('.charTypes')
+      tableRowList.forEach(tableRow => {
+        tableRow.children[1].children[0].classList.add('curPlr')
+      })
+
+      killPlayer(maxVotesCHList[0])
+      endVoting()
+    } else {
+      let plrs = ''
+      maxVotesCHList.forEach(maxVotesColHeader => {
+        plrs += '\n- ' + maxVotesColHeader.querySelector('.textFitted').innerHTML
+      })
+      alert('Данные игроки имеют равное кол-во очков:' + plrs)
+    }
+  }
+}
+
+function endVoting() {
+  votingBtn.onclick = startVoting
+  votingBtn.innerHTML = 'Начать голосование'
+
+  const tableRowList = document.querySelectorAll('.charTypes')
+  tableRowList.forEach(tableRow => {
+    tableRow.children[1].children[0].classList.add('curPlr')
+  })
+
+  const colHeaderList = document.querySelectorAll('.colHeader')
+  colHeaderList.forEach(colHeader => {
+    colHeader.classList.remove('otherPlr')
+
+    colHeader.onclick = 0
+    colHeader.querySelector('.votes').innerHTML = ''
+
+    colHeader.onmouseup = null
+  })
+
+  changeMainBtn()
+}
+
+const votingBtn = document.querySelector('.votingBtn')
+votingBtn.onclick = startVoting

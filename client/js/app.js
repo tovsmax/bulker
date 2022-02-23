@@ -4,6 +4,6 @@ createTable()
 
 mainBtn.click()
 
-showAllTraits()
+// showAllTraits()
 
 // exportPLayers()

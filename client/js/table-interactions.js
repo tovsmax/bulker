@@ -63,7 +63,7 @@ function showTraitFunc(cell) {
     cell.onmousedown = null
     cell.onmouseup = null
 
-    // nextTurn() // переход на следующий ход // НЕ ЗАБЫТЬ РАСКОМЕНТИТЬ!!!!!
+    nextTurn()
   }, 300); // НЕ ЗАБЫВАТЬ МЕНЯТЬ ТАЙМНИ В СТИЛЯХ!!!
 }
 
@@ -129,7 +129,7 @@ function nextTurn() {
 
   for (let ind = 0; ind < charValueList.length; ind++) {
     if (charValueList[ind].classList.contains('curPlr')) {
-      if (ind === curTableWidth-1) { startVoting(); return} // из-за этого могут быть проблемы
+      // if (ind === curTableWidth-1) { startVoting(); return} // из-за этого могут быть проблемы
       curPlrTraitIndList.push(ind)
     }
   }

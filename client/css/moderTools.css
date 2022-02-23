@@ -103,3 +103,7 @@ label>* {
   width: max-content;
   margin: 2px;
 }
+
+.votingBtn {
+  width: 230px;
+}

@@ -1,5 +1,5 @@
 // import { downloadZip } from "/node_modules/client-zip/index.js"
-import { downloadZip } from './downloadZip.js'
+// import { downloadZip } from './downloadZip.js'
 
 
 /**
@@ -74,7 +74,7 @@ function createEventsExportFile() {
   return eventsExportFile
 }
 
-export function exportGame() {
+function exportGame() {
   downloadData(
     ...createPLayersExportFile(),
     createGlobalExportFile(),

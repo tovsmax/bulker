@@ -164,7 +164,7 @@ mainBtn.onclick = () => {
 mainBtn.click()
 
 // Export
-import { exportGame } from "./export.js";
+// import { exportGame } from "./export.js";
 const exportBtn = document.querySelector('.exportBtn')
 exportBtn.onclick = () => {
   exportGame()

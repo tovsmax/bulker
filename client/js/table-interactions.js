@@ -245,3 +245,26 @@ function revivePlayer(playerColHeader) {
     charTypeRow.children[reviveInd].children[0].classList.remove('dead')
   })
 }
+
+
+function fillGlobalData() {
+  const globalSingleDataDict = {
+    '.catastr': catastr,
+    '.globalSurvivorCount': globalSurvivorCount,
+    '.survivingTime': survivingTime,
+    '.bunkerArea': bunkerArea,
+  }
+
+  for (const [globalTraitSelector, curGlobalTraitList] of Object.entries(globalSingleDataDict)) {
+    document.querySelector(globalTraitSelector).innerHTML = curGlobalTraitList.splice(rnd(0, curGlobalTraitList.length-1), 1)[0]
+  }
+
+  const globalListDataDict = {
+    '.bunkerRooms': bunkerRooms,
+    '.globalEquips': globalEquips,
+  }
+
+  // for (const [globalTraitSelector, curGlobalTraitList] of Object.entries(globalListDataDict)) {
+  //   document.querySelector(globalTraitSelector).innerHTML = curGlobalTraitList.splice(rnd(0, curGlobalTraitList.length-1), 1)[0]
+  // }
+}
